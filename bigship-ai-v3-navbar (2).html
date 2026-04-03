@@ -1,0 +1,4025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Bigship — AI-First Seller Panel · v3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.crossorigin.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════
+   DESIGN SYSTEM TOKENS
+═══════════════════════════════ */
+    :root {
+      --bs-navy: #010F5A;
+      --bs-navy-mid: #0a1e6e;
+      --bs-blue: #007bff;
+      --bs-blue-light: #e8f0fe;
+      --bs-purple: #007bff;
+      --bs-purple-pale: #e8f0fe;
+      --bs-purple-border: #90beff;
+      --bs-green-cta: #00B894;
+      --bs-blue-cta: #007bff;
+      --bs-bg: #F4F6F9;
+      --bs-white: #FFFFFF;
+      --bs-text-1: #1a2340;
+      --bs-text-2: #5a6478;
+      --bs-text-3: #9CA3AF;
+      --bs-border: #e2e8f0;
+      --bs-success: #10b981;
+      --bs-success-bg: #ECFDF5;
+      --bs-success-text: #065F46;
+      --bs-warning: #F59E0B;
+      --bs-warning-bg: #FFFBEB;
+      --bs-warning-text: #92400E;
+      --bs-danger: #EF4444;
+      --bs-danger-bg: #FEF2F2;
+      --bs-danger-text: #7F1D1D;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--bs-text-1);
+      background: var(--bs-bg);
+      display: flex;
+      flex-direction: column
+    }
+
+
+    /* ═══════════════════════════════
+   APP SHELL
+═══════════════════════════════ */
+    .shell {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-height: 0
+    }
+
+    /* ═══════════════════════════════
+   SIDEBAR
+═══════════════════════════════ */
+    .sidebar {
+      width: 175px;
+      min-width: 175px;
+      background: var(--bs-navy);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      flex-shrink: 0
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      background: #fff;
+      min-height: 56px
+    }
+
+    .sb-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #010F5A, #007bff);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0
+    }
+
+    .sb-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff
+    }
+
+    .sb-logo-text em {
+      color: #90beff;
+      font-style: normal
+    }
+
+    .sb-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 0
+    }
+
+    .sb-nav::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .sb-nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .1);
+      border-radius: 2px
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 14px;
+      color: rgba(255, 255, 255, .65);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer;
+      transition: all .15s;
+      border-left: 3px solid transparent;
+      user-select: none;
+      position: relative;
+      letter-spacing: .01em
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .07)
+    }
+
+    .nav-item.active {
+      color: #00e5ff;
+      border-left-color: #00e5ff;
+      background: rgba(0, 229, 255, .06);
+      font-weight: 700
+    }
+
+    .nav-icon-wrap {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .12);
+      border: 1.5px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .15s
+    }
+
+    .nav-item:hover .nav-icon-wrap {
+      background: rgba(255, 255, 255, .2);
+      border-color: rgba(255, 255, 255, .18)
+    }
+
+    .nav-item.active .nav-icon-wrap {
+      background: rgba(0, 229, 255, .15);
+      border-color: rgba(0, 229, 255, .4);
+      box-shadow: 0 0 10px rgba(0, 229, 255, .2)
+    }
+
+    .nav-item.active .nav-icon-wrap svg {
+      stroke: #00e5ff
+    }
+
+    .nav-icon-wrap svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0
+    }
+
+    .nav-icon {
+      font-size: 13px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0
+    }
+
+    .nav-arrow {
+      margin-left: auto;
+      font-size: 11px;
+      opacity: .5;
+      font-weight: 600
+    }
+
+    .nav-ai-dot {
+      width: 5px;
+      height: 5px;
+      background: #007bff;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-left: 2px;
+      position: relative
+    }
+
+    .nav-ai-dot::after {
+      content: "AI-enhanced";
+      position: absolute;
+      left: 10px;
+      top: -4px;
+      background: #010F5A;
+      color: #90beff;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      border: 1px solid rgba(0, 123, 255, .3)
+    }
+
+    .nav-item:hover .nav-ai-dot::after {
+      opacity: 1
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--bs-danger);
+      color: #fff;
+      border-radius: 10px;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .nav-sub .nav-item {
+      padding-left: 30px;
+      font-size: 11.5px
+    }
+
+    /* ═══════════════════════════════
+   MAIN AREA
+═══════════════════════════════ */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0
+    }
+
+    /* ═══════════════════════════════
+   TOP BAR
+═══════════════════════════════ */
+    .topbar {
+      height: 56px;
+      background: #fff;
+      border-bottom: 2px solid #010F5A;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 10px;
+      flex-shrink: 0;
+      z-index: 100
+    }
+
+    .tb-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0
+    }
+
+    .tb-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 3px;
+      flex-shrink: 0
+    }
+
+    .tb-hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #1a2340;
+      border-radius: 2px;
+      transition: background .15s
+    }
+
+    .tb-hamburger:hover span {
+      background: #007bff
+    }
+
+    .tb-brand {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      text-decoration: none
+    }
+
+    .tb-brand-icon {
+      width: 30px;
+      height: 30px;
+      background: #010F5A;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .tb-brand-text {
+      font-size: 16px;
+      font-weight: 800;
+      color: #010F5A;
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: -.01em
+    }
+
+    .tb-search-wrap {
+      flex: 1;
+      margin: 0 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      max-width: 500px
+    }
+
+    .tb-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1.5px solid #d0d5dd;
+      border-radius: 24px;
+      padding: 7px 36px 7px 14px;
+      font-size: 13px;
+      color: #aab0bc;
+      width: 100%;
+      transition: border-color .15s
+    }
+
+    .tb-search:hover {
+      border-color: #007bff
+    }
+
+    .tb-search-x {
+      position: absolute;
+      right: 13px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 400
+    }
+
+    .tb-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0
+    }
+
+    .tb-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 22px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: all .15s
+    }
+
+    .tb-recharge {
+      background: #010F5A;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(1, 15, 90, .3)
+    }
+
+    .tb-recharge:hover {
+      background: #0a1e6e
+    }
+
+    .tb-esc {
+      background: #EF4444;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, .2)
+    }
+
+    .tb-esc:hover {
+      background: #dc2626
+    }
+
+    .tb-flag-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #f0f4ff;
+      border: 1.5px solid #d0d5dd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 16px;
+      transition: border-color .15s
+    }
+
+    .tb-flag-btn:hover {
+      border-color: #007bff
+    }
+
+    .tb-wallet-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1.5px solid #d0d5dd;
+      border-radius: 22px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a2340;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color .15s
+    }
+
+    .tb-wallet-pill:hover {
+      border-color: #007bff
+    }
+
+    .tb-wallet-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .tb-plans {
+      background: #010F5A;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 16px
+    }
+
+    .tb-plans:hover {
+      background: #0a1e6e
+    }
+
+    .tb-user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, .35)
+    }
+
+    .tb-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    /* ═══════════════════════════════
+   BREADCRUMB
+═══════════════════════════════ */
+    .breadcrumb-bar {
+      padding: 6px 20px;
+      font-size: 12px;
+      color: var(--bs-text-3);
+      background: #F4F6F9;
+      border-bottom: 1px solid var(--bs-border);
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end
+    }
+
+    .breadcrumb-bar span {
+      color: #007bff;
+      font-weight: 500
+    }
+
+    /* ═══════════════════════════════
+   CONTENT / SCREENS
+═══════════════════════════════ */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden
+    }
+
+    .content::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .content::-webkit-scrollbar-thumb {
+      background: var(--bs-border);
+      border-radius: 2px
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100%
+    }
+
+    .screen.active {
+      display: flex
+    }
+
+    .page-pad {
+      padding: 20px
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 1 — AI ACTIVE BADGE
+═══════════════════════════════ */
+    .ai-active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bs-blue-light);
+      color: #0050cc;
+      border: 1px solid var(--bs-purple-border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--bs-text-1);
+      letter-spacing: -.01em
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--bs-text-2);
+      margin-top: 2px
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 8 — AI CALLOUT CARD
+═══════════════════════════════ */
+    .ai-callout {
+      border: 1.5px solid #90beff;
+      border-radius: 8px;
+      background: #e8f4ff;
+      margin-bottom: 14px;
+      overflow: hidden;
+      transition: all .2s
+    }
+
+    .ai-callout-full {
+      padding: 12px 16px
+    }
+
+    .ai-callout-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .ai-callout-body {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--bs-text-2);
+      line-height: 1.6
+    }
+
+    .ai-callout-strip {
+      padding: 7px 14px;
+      font-size: 12px;
+      color: #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer
+    }
+
+    .ai-callout-strip:hover {
+      background: rgba(0, 123, 255, .06)
+    }
+
+    .ai-callout-toggle {
+      font-size: 11px;
+      cursor: pointer;
+      color: #007bff;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #90beff;
+      background: #fff
+    }
+
+    .ai-callout-toggle:hover {
+      background: #e8f4ff
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 2 — AI vs SYSTEM FIELDS
+═══════════════════════════════ */
+    .field-ai {
+      background: #e8f4ff;
+      border: 1px solid #90beff;
+      border-radius: 6px;
+      padding: 8px 12px
+    }
+
+    .field-ai .f-label {
+      font-size: 10px;
+      font-style: italic;
+      font-weight: 600;
+      color: #007bff;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 3px
+    }
+
+    .field-ai .f-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--bs-text-1)
+    }
+
+    .field-ai .f-explain {
+      font-size: 11px;
+      color: var(--bs-text-2);
+      margin-top: 3px;
+      font-style: normal
+    }
+
+    .field-sys {
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 6px;
+      padding: 8px 12px
+    }
+
+    .field-sys .f-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--bs-text-3);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 3px
+    }
+
+    .field-sys .f-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--bs-text-1)
+    }
+
+    /* ═══════════════════════════════
+   CARDS / COMPONENTS
+═══════════════════════════════ */
+    .card {
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .04)
+    }
+
+    .card-head {
+      padding: 11px 15px;
+      border-bottom: 1px solid var(--bs-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 4 — CUTOFF PILLS
+═══════════════════════════════ */
+    .cutoff {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap
+    }
+
+    .cutoff-green {
+      background: #DCFCE7;
+      color: #166534
+    }
+
+    .cutoff-amber {
+      background: #FEF9C3;
+      color: var(--bs-warning-text);
+      animation: pulse-amber 2s ease infinite
+    }
+
+    .cutoff-red {
+      background: var(--bs-danger-bg);
+      color: var(--bs-danger)
+    }
+
+    @keyframes pulse-amber {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.03)
+      }
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 7 — SHIMMER
+═══════════════════════════════ */
+    .shimmer-wrap {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .shimmer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 8px
+    }
+
+    .shimmer-block {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1s infinite;
+      border-radius: 4px
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
+    }
+
+    .shimmer-text {
+      font-size: 12px;
+      color: #007bff;
+      text-align: center;
+      padding: 10px;
+      font-weight: 500
+    }
+
+    /* ═══════════════════════════════
+   COURIER LIST — COMPACT / EXPAND
+═══════════════════════════════ */
+    .courier-list-wrap {
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 8px
+    }
+
+    .courier-list-wrap::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .courier-list-wrap::-webkit-scrollbar-thumb {
+      background: var(--bs-border);
+      border-radius: 2px
+    }
+
+    .c-row {
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      overflow: hidden;
+      transition: all .2s;
+      cursor: pointer
+    }
+
+    .c-row:hover {
+      border-color: rgba(0, 123, 255, .3);
+      box-shadow: 0 2px 10px rgba(0, 123, 255, .08)
+    }
+
+    .c-row.top-row {
+      border-color: rgba(0, 123, 255, .35);
+      box-shadow: 0 2px 10px rgba(0, 123, 255, .12)
+    }
+
+    .c-row.passed {
+      opacity: .45;
+      cursor: default
+    }
+
+    .c-row.passed:hover {
+      border-color: var(--bs-border);
+      box-shadow: none
+    }
+
+    .c-compact {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      gap: 10px;
+      min-height: 52px
+    }
+
+    .c-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--bs-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .c-name-col {
+      min-width: 0;
+      flex: 1
+    }
+
+    .c-name {
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .c-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 7px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600
+    }
+
+    .badge-top {
+      background: linear-gradient(135deg, #010F5A, #007bff);
+      color: #fff
+    }
+
+    .badge-fast {
+      background: #EFF6FF;
+      color: #1E40AF
+    }
+
+    .badge-cheap {
+      background: #ECFDF5;
+      color: #065F46
+    }
+
+    .badge-accurate {
+      background: var(--bs-purple-pale);
+      color: #4C1D95
+    }
+
+    /* inline score bar */
+    .c-score-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0
+    }
+
+    .c-score-track {
+      width: 80px;
+      height: 4px;
+      background: rgba(0, 0, 0, .08);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .c-score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #007bff, #00B894);
+      border-radius: 2px;
+      width: 0%;
+      transition: width .8s cubic-bezier(.25, 1, .5, 1)
+    }
+
+    .c-score-pct {
+      font-size: 11px;
+      font-weight: 600;
+      color: #007bff;
+      min-width: 28px;
+      text-align: right
+    }
+
+    .c-rate {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .c-expand-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--bs-text-3);
+      transition: transform .2s;
+      flex-shrink: 0
+    }
+
+    .c-expand-btn.open {
+      transform: rotate(90deg)
+    }
+
+    /* expanded detail */
+    .c-detail {
+      display: none;
+      padding: 12px 12px 14px;
+      border-top: 1px solid var(--bs-border);
+      background: #FAFBFF;
+      animation: slideIn .2s ease
+    }
+
+    .c-detail.open {
+      display: block
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .c-chips-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 10px
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500
+    }
+
+    .chip-pickup {
+      background: #FEF3C7;
+      color: #92400E
+    }
+
+    .chip-delivery {
+      background: #EFF6FF;
+      color: #1E40AF
+    }
+
+    .chip-success {
+      background: var(--bs-success-bg);
+      color: var(--bs-success-text)
+    }
+
+    .chip-warn {
+      background: var(--bs-warning-bg);
+      color: var(--bs-warning-text)
+    }
+
+    .c-plain-english {
+      font-size: 12px;
+      color: var(--bs-text-2);
+      margin-bottom: 8px;
+      padding: 7px 10px;
+      background: #fff;
+      border-radius: 6px;
+      border-left: 3px solid #007bff
+    }
+
+    .c-warn-bar {
+      background: var(--bs-warning-bg);
+      border: 1px solid #FDE68A;
+      border-radius: 6px;
+      padding: 7px 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--bs-warning-text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    .c-warn-action {
+      background: var(--bs-green-cta);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap
+    }
+
+    .c-provenance {
+      font-size: 10px;
+      color: var(--bs-text-3);
+      font-style: italic;
+      margin-bottom: 8px
+    }
+
+    /* ═══════════════════════════════
+   MANDATE 9 — FEEDBACK
+═══════════════════════════════ */
+    .feedback-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px
+    }
+
+    .feedback-label {
+      font-size: 11px;
+      color: var(--bs-text-3)
+    }
+
+    .fb-btn {
+      cursor: pointer;
+      font-size: 14px;
+      padding: 3px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--bs-border);
+      background: #fff;
+      transition: all .15s;
+      line-height: 1
+    }
+
+    .fb-btn:hover {
+      border-color: #007bff
+    }
+
+    .fb-btn.up-active {
+      background: #DCFCE7;
+      border-color: #86EFAC;
+      color: #166534
+    }
+
+    .fb-btn.down-active {
+      background: var(--bs-danger-bg);
+      border-color: #FCA5A5;
+      color: var(--bs-danger)
+    }
+
+    .fb-btn:disabled {
+      cursor: default;
+      opacity: .5
+    }
+
+    .fb-btn.up-active:disabled,
+    .fb-btn.down-active:disabled {
+      opacity: 1
+    }
+
+    /* ═══════════════════════════════
+   FILTER PILLS
+═══════════════════════════════ */
+    .filter-bar {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 12px;
+      flex-wrap: wrap
+    }
+
+    .fp {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid var(--bs-border);
+      background: #fff;
+      color: var(--bs-text-2);
+      transition: all .15s;
+      user-select: none
+    }
+
+    .fp:hover {
+      border-color: #007bff;
+      color: #007bff
+    }
+
+    .fp.active {
+      background: #010F5A;
+      color: #fff;
+      border-color: #010F5A
+    }
+
+    /* ═══════════════════════════════
+   STICKY BOTTOM BAR
+═══════════════════════════════ */
+    .sticky-bar {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      border-top: 1px solid var(--bs-border);
+      padding: 11px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      z-index: 50;
+      box-shadow: 0 -3px 12px rgba(0, 0, 0, .06)
+    }
+
+    .sticky-info {
+      flex: 1;
+      font-size: 12px;
+      color: var(--bs-text-2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center
+    }
+
+    .sticky-courier {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--bs-text-1)
+    }
+
+    .sticky-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500
+    }
+
+    .sc-green {
+      background: var(--bs-success-bg);
+      color: var(--bs-success-text)
+    }
+
+    .sc-gray {
+      background: var(--bs-bg);
+      border: 1px solid var(--bs-border);
+      color: var(--bs-text-2)
+    }
+
+    /* ═══════════════════════════════
+   BUTTONS
+═══════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      transition: all .15s;
+      white-space: nowrap
+    }
+
+    .btn-green {
+      background: var(--bs-green-cta);
+      color: #fff
+    }
+
+    .btn-green:hover {
+      background: #00A381;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 184, 148, .3)
+    }
+
+    .btn-blue {
+      background: #007bff;
+      color: #fff;
+      font-weight: 600
+    }
+
+    .btn-blue:hover {
+      background: #0062d6;
+      transform: translateY(-1px)
+    }
+
+    .btn-purple {
+      background: #010F5A;
+      color: #fff;
+      font-weight: 600
+    }
+
+    .btn-purple:hover {
+      background: #5B4CD4
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid var(--bs-border);
+      color: var(--bs-text-2)
+    }
+
+    .btn-outline:hover {
+      border-color: var(--bs-purple);
+      color: var(--bs-purple)
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 12px
+    }
+
+    .btn-xs {
+      padding: 3px 9px;
+      font-size: 11px;
+      border-radius: 5px
+    }
+
+    /* ═══════════════════════════════
+   FORM ELEMENTS
+═══════════════════════════════ */
+    .f-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px
+    }
+
+    .f-label-std {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--bs-text-2);
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    .f-input,
+    .f-select {
+      border: 1px solid var(--bs-border);
+      border-radius: 7px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: var(--bs-text-1);
+      background: #fff;
+      outline: none;
+      width: 100%;
+      transition: border-color .15s
+    }
+
+    .f-input:focus,
+    .f-select:focus {
+      border-color: var(--bs-purple)
+    }
+
+    .f-input.valid {
+      border-color: var(--bs-success)
+    }
+
+    .input-wrap {
+      position: relative
+    }
+
+    .input-check {
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--bs-success);
+      font-size: 14px;
+      pointer-events: none
+    }
+
+    /* ═══════════════════════════════
+   GRID HELPERS
+═══════════════════════════════ */
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .g3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px
+    }
+
+    .g4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px
+    }
+
+    /* ═══════════════════════════════
+   STEPPER
+═══════════════════════════════ */
+    .stepper {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid var(--bs-border);
+      gap: 0;
+      flex-shrink: 0
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .sc-done {
+      background: var(--bs-success);
+      color: #fff
+    }
+
+    .sc-active {
+      background: #007bff;
+      color: #fff
+    }
+
+    .sc-pending {
+      background: var(--bs-bg);
+      color: var(--bs-text-3);
+      border: 1.5px solid var(--bs-border)
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 500
+    }
+
+    .step-label.done {
+      color: var(--bs-success)
+    }
+
+    .step-label.active {
+      color: #007bff
+    }
+
+    .step-label.pending {
+      color: var(--bs-text-3)
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1.5px;
+      margin: 0 10px;
+      min-width: 20px
+    }
+
+    .sl-done {
+      background: #007bff
+    }
+
+    .sl-pending {
+      background: var(--bs-border)
+    }
+
+    /* ═══════════════════════════════
+   TABLES
+═══════════════════════════════ */
+    .bs-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0
+    }
+
+    .bs-table th {
+      padding: 10px 13px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      text-transform: none;
+      letter-spacing: .01em;
+      background: #010F5A;
+      border-bottom: 2px solid rgba(255, 255, 255, .1);
+      text-align: left;
+      white-space: nowrap
+    }
+
+    .bs-table td {
+      padding: 11px 13px;
+      font-size: 12.5px;
+      border-bottom: 1px solid var(--bs-border);
+      vertical-align: middle;
+      color: var(--bs-text-1)
+    }
+
+    .bs-table tr {
+      background: #fff;
+      cursor: pointer;
+      transition: background .12s
+    }
+
+    .bs-table tr:hover td {
+      background: #f0f7ff
+    }
+
+    .bs-table tr.warn-row td {
+      background: #FFFBEB
+    }
+
+    .t-id {
+      font-weight: 600;
+      color: #007bff
+    }
+
+    .t-sub {
+      font-size: 10px;
+      color: var(--bs-text-3);
+      margin-top: 1px
+    }
+
+    /* ═══════════════════════════════
+   STATUS CHIPS
+═══════════════════════════════ */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap
+    }
+
+    .st-unshipped {
+      background: var(--bs-warning-bg);
+      color: var(--bs-warning-text)
+    }
+
+    .st-assigned {
+      background: var(--bs-blue-light);
+      color: #0050cc;
+      border: 1px solid var(--bs-purple-border)
+    }
+
+    .st-review {
+      background: var(--bs-warning-bg);
+      color: var(--bs-warning-text)
+    }
+
+    .st-manual {
+      background: var(--bs-bg);
+      color: var(--bs-text-2);
+      border: 1px solid var(--bs-border)
+    }
+
+    .st-booked {
+      background: var(--bs-success-bg);
+      color: var(--bs-success-text)
+    }
+
+    /* ═══════════════════════════════
+   TOGGLE
+═══════════════════════════════ */
+    .toggle {
+      width: 36px;
+      height: 20px;
+      background: var(--bs-border);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background .2s;
+      flex-shrink: 0
+    }
+
+    .toggle.on {
+      background: var(--bs-purple)
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform .2s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .2)
+    }
+
+    .toggle.on .toggle-knob {
+      transform: translateX(16px)
+    }
+
+    /* ═══════════════════════════════
+   NDR COMPARISON CARDS
+═══════════════════════════════ */
+    .ndr-compare {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px
+    }
+
+    .ndr-opt {
+      border: 2px solid var(--bs-border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all .2s;
+      cursor: pointer
+    }
+
+    .ndr-opt:hover {
+      border-color: rgba(108, 92, 231, .3)
+    }
+
+    .ndr-opt.rec {
+      border-color: var(--bs-success);
+      box-shadow: 0 4px 14px rgba(0, 184, 148, .12)
+    }
+
+    .ndr-opt.sel {
+      border-color: var(--bs-purple)
+    }
+
+    .ndr-opt-head {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--bs-border);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      position: relative
+    }
+
+    .ndr-rec-tag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--bs-success);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px 2px 14px;
+      border-radius: 0 0 0 12px
+    }
+
+    .ndr-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      border: 1px solid var(--bs-border);
+      flex-shrink: 0
+    }
+
+    .ndr-score-big {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1
+    }
+
+    .ndr-score-low {
+      color: var(--bs-warning)
+    }
+
+    .ndr-score-high {
+      color: var(--bs-success)
+    }
+
+    .vs-pill {
+      width: 38px;
+      height: 38px;
+      background: #010F5A;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin: 0 auto
+    }
+
+    /* ═══════════════════════════════
+   DASHBOARD ELEMENTS
+═══════════════════════════════ */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .04)
+    }
+
+    .stat-val {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 4px
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--bs-text-3)
+    }
+
+    .stat-sub {
+      font-size: 10px;
+      color: var(--bs-text-3);
+      margin-top: 3px
+    }
+
+    /* AI Dashboard widget */
+    .ai-widget {
+      border: 2px solid var(--bs-purple-border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, .1)
+    }
+
+    .ai-widget-head {
+      background: linear-gradient(135deg, #010F5A, #0044bb);
+      padding: 13px 16px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .ai-widget-head::after {
+      content: '✦ ✦ ✦';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: rgba(162, 155, 254, .15);
+      pointer-events: none
+    }
+
+    .ai-w-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .ai-w-sub {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .5);
+      margin-top: 3px
+    }
+
+    .ai-tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--bs-border)
+    }
+
+    .ai-tile {
+      padding: 12px 14px;
+      border-right: 1px solid var(--bs-border)
+    }
+
+    .ai-tile:last-child {
+      border-right: none
+    }
+
+    .ai-tile-lbl {
+      font-size: 10px;
+      color: var(--bs-text-3);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 4px
+    }
+
+    .ai-tile-val {
+      font-size: 20px;
+      font-weight: 600
+    }
+
+    .ai-tile-delta {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 3px
+    }
+
+    .delta-up {
+      color: var(--bs-success)
+    }
+
+    .delta-down {
+      color: var(--bs-danger)
+    }
+
+    .ai-widget-body {
+      padding: 12px 16px
+    }
+
+    .ai-route-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bs-border)
+    }
+
+    .ai-route-row:last-child {
+      border-bottom: none
+    }
+
+    .route-rank {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .rr-1 {
+      background: linear-gradient(135deg, #010F5A, #007bff);
+      color: #fff
+    }
+
+    .rr-2 {
+      background: #EFF6FF;
+      color: #1E40AF
+    }
+
+    .rr-3 {
+      background: var(--bs-success-bg);
+      color: var(--bs-success-text)
+    }
+
+    .ai-widget-footer {
+      padding: 9px 16px;
+      background: rgba(240, 238, 255, .5);
+      border-top: 1px solid var(--bs-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .ai-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #007bff;
+      cursor: pointer
+    }
+
+    .ai-link:hover {
+      text-decoration: underline
+    }
+
+    /* ═══════════════════════════════
+   RATE CALC RIGHT PANEL
+═══════════════════════════════ */
+    .rc-layout {
+      display: flex;
+      height: calc(100vh - 110px);
+      overflow: hidden
+    }
+
+    .rc-left {
+      width: 380px;
+      min-width: 340px;
+      border-right: 1px solid var(--bs-border);
+      overflow-y: auto;
+      flex-shrink: 0;
+      background: #fff
+    }
+
+    .rc-left::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .rc-left::-webkit-scrollbar-thumb {
+      background: var(--bs-border)
+    }
+
+    .rc-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden
+    }
+
+    .rc-right-head {
+      background: #010F5A;
+      padding: 13px 18px;
+      color: #fff;
+      flex-shrink: 0
+    }
+
+    .rc-right-head h3 {
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .rc-right-head p {
+      font-size: 11px;
+      opacity: .75;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .rc-tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--bs-border);
+      background: #fff;
+      flex-shrink: 0
+    }
+
+    .rc-tab {
+      flex: 1;
+      padding: 9px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--bs-text-3);
+      border-bottom: 2px solid transparent;
+      transition: all .15s
+    }
+
+    .rc-tab.active {
+      color: #007bff;
+      border-bottom-color: #007bff;
+      font-weight: 600
+    }
+
+    /* Bulk table */
+    .bulk-table-wrap {
+      overflow-x: auto
+    }
+
+    .bulk-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed
+    }
+
+    .bulk-table th,
+    .bulk-table td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .conf-bar {
+      height: 6px;
+      background: var(--bs-border);
+      border-radius: 3px;
+      overflow: hidden;
+      display: inline-block;
+      width: 48px;
+      vertical-align: middle
+    }
+
+    .conf-fill {
+      height: 100%;
+      background: #007bff;
+      border-radius: 3px;
+      transition: width .6s ease
+    }
+
+    /* ═══════════════════════════════
+   TOAST
+═══════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none
+    }
+
+    .toast {
+      background: var(--bs-navy);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .2);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all .3s;
+      pointer-events: none;
+      max-width: 320px;
+      border-left: 3px solid var(--bs-purple)
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    /* ═══════════════════════════════
+   MODAL
+═══════════════════════════════ */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(1, 15, 90, .5);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s
+    }
+
+    .modal-bg.open {
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 26px;
+      max-width: 400px;
+      width: 92%;
+      transform: translateY(12px);
+      transition: transform .25s cubic-bezier(.175, .885, .32, 1.275)
+    }
+
+    .modal-bg.open .modal-box {
+      transform: translateY(0)
+    }
+
+    /* ═══════════════════════════════
+   COURIER PRIORITY CARDS
+═══════════════════════════════ */
+    .cp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px
+    }
+
+    .cp-card {
+      background: #fff;
+      border: 1px solid var(--bs-border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      transition: all .2s
+    }
+
+    .cp-card:hover {
+      border-color: rgba(0, 123, 255, .3);
+      box-shadow: 0 2px 10px rgba(0, 123, 255, .07)
+    }
+
+    .cp-card.warn-courier {
+      border-color: var(--bs-warning);
+      background: #FFFDF0
+    }
+
+    .cp-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--bs-bg);
+      color: var(--bs-text-2);
+      margin-bottom: 4px
+    }
+
+    .cp-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--bs-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700
+    }
+
+    .cp-name {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center
+    }
+
+    .cp-ai-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--bs-blue-light);
+      color: #007bff;
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 600
+    }
+
+    .cp-success {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 2px
+    }
+
+    .cp-success.good {
+      color: var(--bs-success)
+    }
+
+    .cp-success.warn {
+      color: var(--bs-warning)
+    }
+
+    .cp-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px
+    }
+
+    /* Misc */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--bs-border);
+      margin: 12px 0
+    }
+
+    .text-sm {
+      font-size: 12px;
+      color: var(--bs-text-2)
+    }
+
+    .text-xs {
+      font-size: 11px;
+      color: var(--bs-text-3)
+    }
+
+    .italic {
+      font-style: italic
+    }
+
+    .purple {
+      color: #007bff
+    }
+
+    .green {
+      color: var(--bs-success)
+    }
+
+    .warn-text {
+      color: var(--bs-warning-text)
+    }
+
+    .show-more-link {
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      color: #007bff;
+      cursor: pointer;
+      font-weight: 500
+    }
+
+    .show-more-link:hover {
+      text-decoration: underline
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, .3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: inline-block;
+      vertical-align: middle
+    }
+
+    .bs-footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 11px;
+      color: var(--bs-text-3);
+      border-top: 1px solid var(--bs-border);
+      background: #fff;
+      flex-shrink: 0
+    }
+
+    .bs-footer a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="shell">
+
+    <!-- ══════════════ SIDEBAR ══════════════ -->
+    <nav class="sidebar">
+      <div class="sb-logo"
+        style="padding:10px 14px;justify-content:center;background:#fff;border-bottom:1px solid rgba(255,255,255,.08)">
+        <img src="/biglogo.png" alt="Bigship"
+          style="height:36px;width:auto;object-fit:contain;display:block;max-width:130px" />
+      </div>
+      <div class="sb-nav">
+        <div class="nav-item active" onclick="showScreen('screen-dashboard',this)">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg></div> Dashboard<div class="nav-ai-dot"></div>
+        </div>
+        <div class="nav-item" onclick="showScreen('screen-orders',this)">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="1" />
+              <line x1="9" y1="12" x2="15" y2="12" />
+              <line x1="9" y1="16" x2="13" y2="16" />
+            </svg></div> My Orders<div class="nav-ai-dot"></div><span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-sub" id="sub-orders">
+          <div class="nav-item" onclick="showScreen('screen-addorder',this)">– Add Order</div>
+          <div class="nav-item" onclick="showScreen('screen-orders',this)">– Orders</div>
+        </div>
+        <div class="nav-item" onclick="showScreen('screen-ratecalc',this)">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2" />
+              <line x1="8" y1="6" x2="16" y2="6" />
+              <line x1="8" y1="10" x2="10" y2="10" />
+              <line x1="12" y1="10" x2="14" y2="10" />
+              <line x1="16" y1="10" x2="16" y2="10" />
+              <line x1="8" y1="14" x2="10" y2="14" />
+              <line x1="12" y1="14" x2="14" y2="14" />
+              <line x1="16" y1="14" x2="16" y2="18" />
+              <line x1="8" y1="18" x2="10" y2="18" />
+              <line x1="12" y1="18" x2="14" y2="18" />
+            </svg></div> Rate Calculator<div class="nav-ai-dot"></div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="10" r="3" />
+              <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
+            </svg></div> Hyperlocal<span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="8" y1="13" x2="16" y2="13" />
+              <line x1="8" y1="17" x2="14" y2="17" />
+              <line x1="8" y1="9" x2="10" y2="9" />
+            </svg></div> Reports
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+              <path d="M5 21h14" />
+              <path d="M5 21l1.5-9h11L19 21" />
+              <path d="M8 12a4 4 0 0 1 8 0" />
+            </svg></div> Overweight
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg></div> Billings
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 1l4 4-4 4" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <path d="M7 23l-4-4 4-4" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg></div> Remittance
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg></div> Warehouse
+        </div>
+        <div class="nav-item" onclick="showScreen('screen-priority',this)">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg></div> Settings<div class="nav-ai-dot"></div><span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-sub" id="sub-settings">
+          <div class="nav-item" onclick="showScreen('screen-priority',this)">– Courier Priority</div>
+          <div class="nav-item">– Plan History</div>
+          <div class="nav-item">– Consignor List</div>
+        </div>
+        <div class="nav-item" onclick="showScreen('screen-ndr',this)">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <polyline points="23 20 23 14 17 14" />
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15" />
+            </svg></div> NDR Center<div class="nav-ai-dot"></div><span class="nav-badge">45</span>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></div> Spot Rate
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg></div> Shipment Doc
+        </div>
+      </div>
+    </nav>
+
+    <!-- ══════════════ MAIN ══════════════ -->
+    <div class="main">
+
+      <!-- TOP BAR (shared) -->
+      <div class="topbar">
+        <!-- Left: hamburger + brand logo -->
+        <div class="tb-logo-area">
+          <!-- <div class="tb-hamburger" title="Toggle menu">
+            <span></span><span></span><span></span>
+          </div> -->
+          <!-- <div class="tb-brand">
+        <div class="tb-brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="16" r="1"/></svg>
+        </div>
+        <span class="tb-brand-text">Bigship</span>
+      </div> -->
+        </div>
+        <!-- Centre: search bar -->
+        <div class="tb-search-wrap">
+          <div class="tb-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>Search By Order ID</span>
+          </div>
+          <span class="tb-search-x">&#10005;</span>
+        </div>
+        <!-- Right: action buttons -->
+        <div class="tb-right">
+          <button class="tb-btn tb-recharge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fbbf24" stroke="none" style="flex-shrink:0">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            Recharge
+          </button>
+          <button class="tb-btn tb-esc">
+            <span
+              style="width:8px;height:8px;background:#fff;border-radius:50%;display:inline-block;flex-shrink:0"></span>
+            Escalation
+          </button>
+          <div class="tb-flag-btn" title="Language / Region">🇮🇳</div>
+          <div class="tb-wallet-pill">
+            <div class="tb-wallet-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+            </div>
+            <span>&#8377; 1 lac+</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+              <polyline points="23 4 23 10 17 10" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+            </svg>
+          </div>
+          <button class="tb-btn tb-plans">Plans</button>
+          <div class="tb-user-avatar">I</div>
+        </div>
+      </div>
+
+      <!-- BREADCRUMB (shared, updated by JS) -->
+      <div class="breadcrumb-bar" id="breadcrumb"><span style="color:var(--bs-text-3)">Dashboard /
+        </span><span>Home</span></div>
+
+      <!-- CONTENT -->
+      <div class="content" id="content">
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 1 — DASHBOARD
+    ═══════════════════════════════════════ -->
+        <div class="screen active page-pad" id="screen-dashboard">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Welcome, Indu 👋</div>
+              <div class="page-subtitle">Here's your shipment overview</div>
+            </div>
+            <div class="ai-active-badge">✦ Bigship AI Active</div>
+          </div>
+
+          <!-- Quick access icons -->
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px">
+            <div onclick="showScreen('screen-ratecalc',document.querySelector('[onclick*=ratecalc]'))"
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:all .15s"
+              onmouseover="this.style.borderColor='var(--bs-purple)'"
+              onmouseout="this.style.borderColor='var(--bs-border)'">
+              <div style="font-size:22px;margin-bottom:4px">🧮</div>
+              <div style="font-size:11px;font-weight:500">Rate Calculator</div>
+            </div>
+            <div
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer">
+              <div style="font-size:22px;margin-bottom:4px">🏬</div>
+              <div style="font-size:11px;font-weight:500">Add Warehouse</div>
+            </div>
+            <div
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer">
+              <div style="font-size:22px;margin-bottom:4px">💳</div>
+              <div style="font-size:11px;font-weight:500">Recharge Wallet</div>
+            </div>
+            <div
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer">
+              <div style="font-size:22px;margin-bottom:4px">💰</div>
+              <div style="font-size:11px;font-weight:500">Early COD</div>
+            </div>
+            <div onclick="showScreen('screen-orders',document.querySelector('[onclick*=orders]'))"
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer"
+              onmouseover="this.style.borderColor='var(--bs-purple)'"
+              onmouseout="this.style.borderColor='var(--bs-border)'">
+              <div style="font-size:22px;margin-bottom:4px">📦</div>
+              <div style="font-size:11px;font-weight:500">Book Order</div>
+            </div>
+            <div onclick="showScreen('screen-ndr',document.querySelector('[onclick*=ndr]'))"
+              style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:12px;text-align:center;cursor:pointer"
+              onmouseover="this.style.borderColor='var(--bs-purple)'"
+              onmouseout="this.style.borderColor='var(--bs-border)'">
+              <div style="font-size:22px;margin-bottom:4px">🔄</div>
+              <div style="font-size:11px;font-weight:500">NDR Center</div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bs-purple)">103</div>
+              <div class="stat-lbl">Total Shipments</div>
+              <div class="stat-sub">Last 60 days</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bs-success)">0</div>
+              <div class="stat-lbl">Today Shipments</div>
+              <div class="stat-sub">Mar 27, 2026</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bs-text-2)">0</div>
+              <div class="stat-lbl">Yesterday</div>
+              <div class="stat-sub">Mar 26, 2026</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bs-warning)">0</div>
+              <div class="stat-lbl">COD Count</div>
+              <div class="stat-sub">Pending</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bs-text-1);font-size:18px">₹1,107</div>
+              <div class="stat-lbl">Avg Shipping Cost</div>
+              <div class="stat-sub">Last 60 days</div>
+            </div>
+          </div>
+
+          <!-- Two-column layout -->
+          <div style="display:grid;grid-template-columns:60% 40%;gap:16px;align-items:start">
+            <!-- Left: Latest Orders -->
+            <div class="card">
+              <div class="card-head">
+                <div class="card-title">Latest Orders</div>
+                <button class="btn btn-outline btn-xs"
+                  onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">View
+                  All</button>
+              </div>
+              <table class="bs-table">
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>LR/AWB No</th>
+                    <th>Consignee</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                    <td>1</td>
+                    <td>
+                      <div class="t-id">226094878</div>
+                      <div class="t-sub">Mar 25, 2026</div>
+                    </td>
+                    <td>Testing</td>
+                    <td><span class="status st-unshipped">Unshipped</span></td>
+                  </tr>
+                  <tr onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                    <td>2</td>
+                    <td>
+                      <div class="t-id">122217482</div>
+                      <div class="t-sub">Mar 25, 2026</div>
+                    </td>
+                    <td>Testing</td>
+                    <td><span class="status st-unshipped">Unshipped</span></td>
+                  </tr>
+                  <tr onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                    <td>3</td>
+                    <td>
+                      <div class="t-id">321775012</div>
+                      <div class="t-sub">Mar 25, 2026</div>
+                    </td>
+                    <td>Testing</td>
+                    <td><span class="status st-unshipped">Unshipped</span></td>
+                  </tr>
+                  <tr onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                    <td>4</td>
+                    <td>
+                      <div class="t-id">470237663</div>
+                      <div class="t-sub">Mar 25, 2026</div>
+                    </td>
+                    <td>Testing</td>
+                    <td><span class="status st-unshipped">Unshipped</span></td>
+                  </tr>
+                  <tr onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                    <td>5</td>
+                    <td>
+                      <div class="t-id">1778305935</div>
+                      <div class="t-sub">Mar 25, 2026</div>
+                    </td>
+                    <td>Testing</td>
+                    <td><span class="status st-unshipped">Unshipped</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Right: AI Widget -->
+            <div class="ai-widget">
+              <div class="ai-widget-head">
+                <div class="ai-w-title"><span
+                    style="background:linear-gradient(135deg,#010F5A,#007bff);border-radius:6px;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">✦</span>Bigship
+                  AI — Delivery Intelligence</div>
+                <div class="ai-w-sub">Delhi 110011 → New Delhi 110001 · Last 30 days</div>
+              </div>
+              <div class="ai-tiles">
+                <div class="ai-tile">
+                  <div class="ai-tile-lbl">Avg AI Score</div>
+                  <div class="ai-tile-val purple">83%</div>
+                  <div class="ai-tile-delta delta-up">↑ +2% this week</div>
+                </div>
+                <div class="ai-tile">
+                  <div class="ai-tile-lbl">Avg Delivery</div>
+                  <div class="ai-tile-val">6.4d</div>
+                  <div class="ai-tile-delta delta-up">↓ 0.2d faster</div>
+                </div>
+                <div class="ai-tile">
+                  <div class="ai-tile-lbl">AI Accuracy</div>
+                  <div class="ai-tile-val">79%</div>
+                  <div class="ai-tile-delta delta-up">↑ +4% vs last</div>
+                </div>
+              </div>
+              <div class="ai-widget-body">
+                <div
+                  style="font-size:10px;font-weight:500;color:var(--bs-text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">
+                  Top 3 routes by AI confidence</div>
+                <div class="ai-route-row">
+                  <div class="route-rank rr-1">1</div>
+                  <div style="flex:1">
+                    <div style="font-size:12px;font-weight:600">Delhi → New Delhi</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">34 shipments · Zone D</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-size:12px;font-weight:600;color:var(--bs-purple)">MOVIN</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">✦ 100%</div>
+                  </div>
+                </div>
+                <div class="ai-route-row">
+                  <div class="route-rank rr-2">2</div>
+                  <div style="flex:1">
+                    <div style="font-size:12px;font-weight:600">Delhi → Mumbai</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">28 shipments · Zone E</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-size:12px;font-weight:600;color:var(--bs-purple)">Ekart</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">✦ 98%</div>
+                  </div>
+                </div>
+                <div class="ai-route-row">
+                  <div class="route-rank rr-3">3</div>
+                  <div style="flex:1">
+                    <div style="font-size:12px;font-weight:600">Delhi → Bengaluru</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">19 shipments · Zone F</div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-size:12px;font-weight:600;color:var(--bs-purple)">LTL Delhivery</div>
+                    <div style="font-size:10px;color:var(--bs-text-3)">✦ 93%</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:8px 16px;background:var(--bs-warning-bg);border-top:1px solid #FDE68A;cursor:pointer"
+                onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">
+                <span style="font-size:12px;color:var(--bs-warning-text)">⚠ <strong>2 orders</strong> have cutoff
+                  warnings today — Ekart &amp; Shadowfax cutoffs passed →</span>
+              </div>
+              <div class="ai-widget-footer">
+                <div class="text-xs italic">✦ Bigship AI · 2,41,847 shipments analysed · last 90 days</div>
+                <div class="ai-link"
+                  onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">View Full
+                  Report →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 2 — MY ORDERS
+    ═══════════════════════════════════════ -->
+        <div class="screen page-pad" id="screen-orders">
+          <div class="page-header">
+            <div>
+              <div class="page-title">My Orders</div>
+              <div style="display:flex;gap:0;margin-top:8px;border-bottom:1px solid var(--bs-border)">
+                <div
+                  style="padding:6px 14px;font-size:12px;font-weight:600;color:var(--bs-purple);border-bottom:2px solid var(--bs-purple);cursor:pointer">
+                  Unshipped <span
+                    style="background:var(--bs-warning-bg);color:var(--bs-warning-text);border-radius:10px;padding:1px 6px;font-size:10px;margin-left:3px">67</span>
+                </div>
+                <div style="padding:6px 14px;font-size:12px;color:var(--bs-text-3);cursor:pointer">Pickup Scheduled
+                  <span
+                    style="background:var(--bs-success-bg);color:var(--bs-success-text);border-radius:10px;padding:1px 6px;font-size:10px;margin-left:3px">89</span>
+                </div>
+                <div style="padding:6px 14px;font-size:12px;color:var(--bs-text-3);cursor:pointer">Cancelled <span
+                    style="background:var(--bs-danger-bg);color:var(--bs-danger);border-radius:10px;padding:1px 6px;font-size:10px;margin-left:3px">14</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <div class="ai-active-badge">✦ Bigship AI Active</div>
+              <button class="btn btn-purple btn-sm"
+                onclick="showScreen('screen-bulk',document.querySelector('[onclick*=screen-bulk]') || {classList:{add:()=>{},remove:()=>{}}})">✦
+                Assign AI to All Unshipped →</button>
+              <button class="btn btn-blue btn-sm"
+                onclick="showScreen('screen-addorder',document.querySelector('[onclick*=screen-addorder]'))">+ Add
+                Order</button>
+            </div>
+          </div>
+          <!-- AI Callout -->
+          <div class="ai-callout" id="callout-orders">
+            <div class="ai-callout-full" id="callout-orders-full">
+              <div class="ai-callout-title">✦ Bigship AI · Personalised to your account <button
+                  class="ai-callout-toggle" onclick="collapseCallout('orders')">▾ Collapse</button></div>
+              <div class="ai-callout-body">Predictions based on <strong>2,41,847 shipments</strong> analysed on your
+                routes in the last 90 days. Route average success rate: <strong>74%</strong>. Couriers above 74% are
+                performing above your route average.</div>
+            </div>
+            <div class="ai-callout-strip" id="callout-orders-strip" style="display:none"
+              onclick="expandCallout('orders')">
+              <span>✦ Bigship AI · 2.4L shipments · Route avg 74%</span><span>▸ expand</span>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto">
+            <table class="bs-table" id="orders-table">
+              <thead>
+                <tr>
+                  <th style="width:40px"><input type="checkbox" style="accent-color:var(--bs-purple)"
+                      onchange="selectAllOrders(this)"></th>
+                  <th>LR/AWB No</th>
+                  <th>Date</th>
+                  <th>Consignee</th>
+                  <th>Status</th>
+                  <th>✦ AI Recommendation</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 3 — ADD ORDER (4 steps)
+    ═══════════════════════════════════════ -->
+        <div class="screen" id="screen-addorder" style="flex-direction:column">
+          <!-- Stepper -->
+          <div class="stepper">
+            <div class="step">
+              <div class="step-circle sc-done" id="step1-circle">✓</div><span class="step-label done"
+                id="step1-label">Order Info</span>
+            </div>
+            <div class="step-line sl-done" id="line1"></div>
+            <div class="step">
+              <div class="step-circle sc-done" id="step2-circle">✓</div><span class="step-label done"
+                id="step2-label">Box &amp; Pickup</span>
+            </div>
+            <div class="step-line sl-done" id="line2"></div>
+            <div class="step">
+              <div class="step-circle sc-active" id="step3-circle">3</div><span class="step-label active"
+                id="step3-label">Select Courier <span style="font-size:10px">✦</span></span>
+            </div>
+            <div class="step-line sl-pending" id="line3"></div>
+            <div class="step">
+              <div class="step-circle sc-pending" id="step4-circle">4</div><span class="step-label pending"
+                id="step4-label">Confirm</span>
+            </div>
+          </div>
+
+          <!-- STEP 3 — courier selection -->
+          <div class="page-pad" id="ao-step3" style="flex:1">
+            <div class="page-header">
+              <div>
+                <div class="page-title">Select Courier — Delhi 110011 → New Delhi 110001</div>
+                <div class="page-subtitle" style="margin-top:4px;display:flex;align-items:center;gap:8px">
+                  <span class="ai-active-badge">✦ Bigship AI Active</span>
+                  <span class="text-sm">Bigship AI has ranked 7 couriers based on 2,41,847 shipments on this
+                    route</span>
+                </div>
+              </div>
+            </div>
+            <!-- AI Callout -->
+            <div class="ai-callout" id="callout-ao">
+              <div class="ai-callout-full" id="callout-ao-full">
+                <div class="ai-callout-title">✦ Bigship AI · Personalised to your account <button
+                    class="ai-callout-toggle" onclick="collapseCallout('ao')">▾ Collapse</button></div>
+                <div class="ai-callout-body">Predictions based on <strong>2,41,847 shipments</strong> on your routes ·
+                  last 90 days. <strong>Route average success rate: 74%</strong>. AI Score above 74% = better than your
+                  route average.</div>
+              </div>
+              <div class="ai-callout-strip" id="callout-ao-strip" style="display:none" onclick="expandCallout('ao')">
+                <span>✦ Bigship AI · 2.4L shipments · Route avg 74% · Delhi → New Delhi</span><span>▸ expand</span>
+              </div>
+            </div>
+            <!-- Filter pills -->
+            <div class="filter-bar" id="ao-filters">
+              <div class="fp active" onclick="aoFilter('ai',this)">✦ AI Score</div>
+              <div class="fp" onclick="aoFilter('cheapest',this)">₹ Cheapest</div>
+              <div class="fp" onclick="aoFilter('fastest',this)">⚡ Fastest Pickup</div>
+              <div class="fp" onclick="aoFilter('reliable',this)">🛡 Most Reliable</div>
+            </div>
+            <!-- Courier list -->
+            <div class="courier-list-wrap" id="ao-courier-list"></div>
+            <div class="show-more-link" id="ao-show-more" onclick="showPassedCouriers('ao')" style="display:none">▾ Show
+              2 more couriers (cutoff passed)</div>
+          </div>
+
+          <!-- STEP 4 — confirm -->
+          <div class="page-pad" id="ao-step4" style="display:none;max-width:700px">
+            <div class="page-header">
+              <div class="page-title">Order Confirmation</div>
+              <div class="ai-active-badge">✦ Bigship AI Active</div>
+            </div>
+            <!-- Success icon -->
+            <div style="text-align:center;margin-bottom:16px">
+              <div
+                style="width:52px;height:52px;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border:2px solid var(--bs-success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)">
+                ✓</div>
+              @keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+              <div style="font-size:16px;font-weight:600">Order Ready to Book</div>
+              <div class="text-sm" style="margin-top:3px">Review the details and confirm to generate your shipment label
+              </div>
+            </div>
+            <!-- AI green banner -->
+            <div
+              style="background:var(--bs-success-bg);border:1px solid #86EFAC;border-radius:7px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--bs-success-text)">
+              <span>✦</span><strong>AI recommendation followed — MOVIN selected.</strong> This is the best option for
+              this route today.
+            </div>
+            <!-- Order summary -->
+            <div class="card" style="margin-bottom:12px">
+              <div class="card-head" style="background:#010F5A">
+                <div class="card-title" style="color:#fff">📋 Order Summary</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+                <div
+                  style="padding:10px 14px;border-bottom:1px solid var(--bs-border);border-right:1px solid var(--bs-border)">
+                  <div class="text-xs">Order Date</div>
+                  <div style="font-weight:500;margin-top:2px">27-03-2026</div>
+                </div>
+                <div style="padding:10px 14px;border-bottom:1px solid var(--bs-border)">
+                  <div class="text-xs">Order ID</div>
+                  <div style="font-weight:600;color:var(--bs-purple);margin-top:2px">INV-2026-03-7841</div>
+                </div>
+                <div
+                  style="padding:10px 14px;border-bottom:1px solid var(--bs-border);border-right:1px solid var(--bs-border)">
+                  <div class="text-xs">Destination</div>
+                  <div style="font-weight:500;margin-top:2px">New Delhi, 110001</div>
+                </div>
+                <div style="padding:10px 14px;border-bottom:1px solid var(--bs-border)">
+                  <div class="text-xs">Pickup From</div>
+                  <div style="font-weight:500;margin-top:2px">Sinola Malsi Store, Delhi</div>
+                </div>
+                <div style="padding:10px 14px;border-right:1px solid var(--bs-border)">
+                  <div class="text-xs">Payment Mode</div>
+                  <div style="font-weight:500;margin-top:2px">COD</div>
+                </div>
+                <div style="padding:10px 14px">
+                  <div class="text-xs">Package</div>
+                  <div style="font-weight:500;margin-top:2px">10 kg · 10×10×10 cm</div>
+                </div>
+              </div>
+            </div>
+            <!-- AI Courier card -->
+            <div
+              style="border:1.5px solid var(--bs-purple-border);border-radius:10px;overflow:hidden;margin-bottom:12px">
+              <div
+                style="background:linear-gradient(135deg,#010F5A,#0044bb);padding:13px 16px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:16px">✦</span>
+                <span style="font-size:13px;font-weight:600;color:#fff">Bigship AI — Selected Courier</span>
+                <span
+                  style="background:rgba(255,255,255,.15);color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:600;margin-left:auto">Best
+                  Overall Match</span>
+              </div>
+              <!-- Trust banner -->
+              <div
+                style="background:var(--bs-warning-bg);padding:8px 14px;font-size:12px;color:var(--bs-warning-text);display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bs-border)">
+                📊 After delivery, <strong>Bigship AI</strong> will send you an accuracy report for this route
+                prediction.
+              </div>
+              <!-- Courier identity -->
+              <div
+                style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--bs-border)">
+                <div
+                  style="width:48px;height:48px;border-radius:10px;background:#007bff18;color:#007bff;border:1px solid #007bff30;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0">
+                  MOV</div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px"><span
+                      style="font-size:18px;font-weight:600">MOVIN</span><span class="c-badge badge-top">✦ Top
+                      Pick</span></div>
+                  <div class="text-sm" style="margin-top:2px">Best choice for this route today · #1 of 7 couriers</div>
+                </div>
+              </div>
+              <!-- AI fields grid (Mandate 2) -->
+              <div
+                style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 16px;border-bottom:1px solid var(--bs-border)">
+                <div class="field-ai">
+                  <div class="f-label">⏱ Predicted Pickup</div>
+                  <div class="f-val">~17 hours from now</div>
+                  <div class="f-explain">Pickup expected in ~17 hours from your warehouse</div>
+                </div>
+                <div class="field-ai">
+                  <div class="f-label">🚚 Predicted Delivery</div>
+                  <div class="f-val">~6.1 days</div>
+                  <div class="f-explain">Estimated delivery in ~6 days from pickup</div>
+                </div>
+                <div class="field-ai">
+                  <div class="f-label">✓ Success Rate</div>
+                  <div class="f-val" style="color:var(--bs-success)">~82.1% <span
+                      style="font-size:11px;color:var(--bs-success-text)">(+8.1%)</span></div>
+                  <div class="f-explain">82.1% of shipments on this route delivered on time · 8% better than average
+                  </div>
+                </div>
+                <div class="field-ai">
+                  <div class="f-label">🕐 Cutoff Time</div>
+                  <div class="f-val"><span class="cutoff cutoff-green">Cutoff in 2h 30m ✓</span></div>
+                  <div class="f-explain">Book before 14:00 IST to ship today</div>
+                </div>
+                <div class="field-sys">
+                  <div class="f-label">Rate</div>
+                  <div class="f-val">₹1,800.00</div>
+                </div>
+                <div class="field-sys">
+                  <div class="f-label">TAT (Contractual)</div>
+                  <div class="f-val">5 days</div>
+                </div>
+              </div>
+              <!-- Score bar -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--bs-border)">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px"><span
+                    style="font-size:10px;font-style:italic;font-weight:500;color:#7C3AED;text-transform:uppercase;letter-spacing:.05em">✦
+                    Bigship AI Score</span><span
+                    style="margin-left:auto;font-size:14px;font-weight:600;color:var(--bs-purple)">100%</span></div>
+                <div style="height:7px;background:var(--bs-border);border-radius:4px;overflow:hidden">
+                  <div class="conf-score-bar"
+                    style="height:100%;background:linear-gradient(90deg,#007bff,#00B894);border-radius:4px;width:0%;transition:width 1s ease">
+                  </div>
+                </div>
+                <div class="text-xs italic" style="margin-top:6px">✦ Bigship AI · 2,41,847 shipments analysed · Delhi →
+                  New Delhi · last 90 days</div>
+              </div>
+              <!-- Feedback -->
+              <div style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between">
+                <div class="text-xs">Was this AI recommendation helpful?</div>
+                <div class="feedback-row" style="margin-top:0" id="fb-conf"><span class="fb-btn" id="fb-conf-up"
+                    onclick="giveFeedback('conf','up')">👍</span><span class="fb-btn" id="fb-conf-down"
+                    onclick="giveFeedback('conf','down')">👎</span></div>
+              </div>
+            </div>
+            <!-- Rate breakdown -->
+            <div class="card" style="margin-bottom:12px">
+              <div class="card-head">
+                <div class="card-title">Rate Breakdown</div>
+              </div>
+              <div style="padding:12px 14px">
+                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span
+                    style="color:var(--bs-text-2)">Base Charge</span><span style="font-weight:500">₹1,753.00</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span
+                    style="color:var(--bs-text-2)">Handling / Other</span><span
+                    style="color:var(--bs-text-3)">₹0.00</span></div>
+                <div class="divider"></div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0"><span
+                    style="font-size:14px;font-weight:600">Total</span><span
+                    style="font-size:17px;font-weight:600;color:var(--bs-purple)">₹1,800.00</span></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-outline" onclick="backToStep3()">← Change Courier</button>
+              <button class="btn btn-green" style="flex:1;font-size:14px" onclick="bookOrder()">📦 Book Order &amp;
+                Generate Label</button>
+            </div>
+          </div>
+
+          <!-- Sticky bottom bar -->
+          <div class="sticky-bar" id="ao-sticky" style="display:none">
+            <div class="sticky-info">
+              <span class="sticky-courier" id="sticky-name">MOVIN</span>
+              <span class="sticky-chip sc-gray" id="sticky-price">₹1,800</span>
+              <span class="sticky-chip sc-green">🚚 ~6.1 days</span>
+              <span class="sticky-chip sc-green">✓ 82.1% success</span>
+              <span class="sticky-chip" style="background:#DCFCE7;color:#166534">Cutoff in 2h 30m ✓</span>
+            </div>
+            <button class="btn btn-green" onclick="goToStep4()">Confirm &amp; Book →</button>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 4 — RATE CALCULATOR
+    ═══════════════════════════════════════ -->
+        <div class="screen" id="screen-ratecalc">
+          <div
+            style="padding:12px 20px 8px;background:#fff;border-bottom:1px solid var(--bs-border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:16px;font-weight:600">Rate Calculator</div>
+            <div class="ai-active-badge">✦ Bigship AI Active</div>
+          </div>
+          <div class="rc-layout">
+            <!-- Left form -->
+            <div class="rc-left">
+              <div style="padding:14px">
+                <div class="rc-tab-bar">
+                  <div class="rc-tab">International</div>
+                  <div class="rc-tab active">Domestic</div>
+                </div>
+                <div style="padding:12px 0 8px;font-size:11px;color:var(--bs-danger);font-weight:500">* All Fields
+                  Required</div>
+                <div class="g2" style="margin-bottom:10px">
+                  <div class="f-group">
+                    <div class="f-label-std">Pickup Pincode *</div>
+                    <div class="input-wrap"><input class="f-input valid" value="248003"><span
+                        class="input-check">✓</span></div>
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Destination Pincode *</div>
+                    <div class="input-wrap"><input class="f-input valid" value="110001"><span
+                        class="input-check">✓</span></div>
+                  </div>
+                </div>
+                <div class="g2" style="margin-bottom:10px">
+                  <div class="f-group">
+                    <div class="f-label-std">Payment Mode *</div><select class="f-select">
+                      <option>COD</option>
+                      <option>Prepaid</option>
+                    </select>
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Risk Type *</div><select class="f-select">
+                      <option>Owner Risk</option>
+                      <option>Third Party</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><input type="checkbox"
+                    id="multi-box" style="accent-color:var(--bs-purple)"><label for="multi-box"
+                    style="font-size:13px;color:var(--bs-text-2);cursor:pointer">Multi Box Shipment</label></div>
+                <div style="font-size:12px;font-weight:600;margin-bottom:8px">Boxes and Dimensions *</div>
+                <div style="display:grid;grid-template-columns:38px 1fr 1fr 1fr 62px;gap:5px;margin-bottom:10px">
+                  <div class="f-group">
+                    <div class="f-label-std">No</div><input class="f-input" value="1" style="text-align:center">
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Length</div>
+                    <div style="display:flex;align-items:center;gap:2px"><input class="f-input" value="10"><span
+                        style="font-size:9px;color:var(--bs-text-3);font-weight:600">CM</span></div>
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Height</div>
+                    <div style="display:flex;align-items:center;gap:2px"><input class="f-input" value="10"><span
+                        style="font-size:9px;color:var(--bs-text-3);font-weight:600">CM</span></div>
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Width</div>
+                    <div style="display:flex;align-items:center;gap:2px"><input class="f-input" value="10"><span
+                        style="font-size:9px;color:var(--bs-text-3);font-weight:600">CM</span></div>
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">Weight</div>
+                    <div style="display:flex;align-items:center;gap:2px"><input class="f-input" value="10"><span
+                        style="font-size:9px;color:var(--bs-text-3);font-weight:600">KG</span></div>
+                  </div>
+                </div>
+                <div class="g2" style="margin-bottom:14px">
+                  <div class="f-group">
+                    <div class="f-label-std">Invoice Amount *</div><input class="f-input" value="1000">
+                  </div>
+                  <div class="f-group">
+                    <div class="f-label-std">COD Amount *</div><input class="f-input" value="1000">
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="btn btn-outline btn-sm">Reset</button>
+                  <button class="btn btn-blue" style="flex:1" id="rc-check-btn" onclick="rcCheckPrice()">🤖 CHECK
+                    PRICE</button>
+                </div>
+              </div>
+              <!-- AI recommendation callout below form -->
+              <div id="rc-ai-rec" style="display:none;padding:12px 14px;border-top:1px solid var(--bs-border)">
+                <div class="ai-callout" style="margin-bottom:0">
+                  <div class="ai-callout-full">
+                    <div class="ai-callout-title" style="font-size:12px">✦ Bigship AI Recommendation</div>
+                    <div class="ai-callout-body" style="margin-top:6px">MOVIN scores highest — <strong>82.1% success
+                        rate</strong> (+8.1% vs route avg), ~17h pickup, ~6.1 day delivery at ₹1,800.</div>
+                    <div class="text-xs italic" style="margin-top:5px">Based on last 90 days of shipment data for this
+                      route</div>
+                    <button class="btn btn-green btn-sm" style="margin-top:8px;width:100%"
+                      onclick="showScreen('screen-addorder',document.querySelector('[onclick*=screen-addorder]'))">Book
+                      this Courier →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right results panel -->
+            <div class="rc-right">
+              <div class="rc-right-head">
+                <h3>Rates for Shipping your Package from (248003) to (110001)</h3>
+                <p id="rc-right-sub"><span class="ai-active-badge" style="font-size:10px;padding:2px 8px">✦ Bigship AI
+                    Active</span> Enter details and click CHECK PRICE</p>
+              </div>
+
+              <!-- STATE A: empty -->
+              <div id="rc-empty"
+                style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center">
+                <div style="font-size:40px;margin-bottom:12px">📦</div>
+                <div style="font-size:14px;font-weight:600;margin-bottom:6px">Enter shipment details to see AI-powered
+                  rates</div>
+                <div class="text-sm" style="max-width:280px;margin-bottom:18px;line-height:1.6">Click CHECK PRICE to see
+                  courier options ranked by Bigship AI</div>
+                <div
+                  style="background:#fff;border:1px solid var(--bs-border);border-radius:8px;padding:14px;text-align:left;width:100%;max-width:320px">
+                  <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--bs-border)">
+                    <div
+                      style="font-size:12px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:5px">
+                      <span class="ai-active-badge" style="font-size:10px;padding:1px 7px">✦ AI Score</span>
+                    </div>
+                    <div class="text-xs" style="margin-top:3px">Ranks couriers by overall performance — speed,
+                      reliability &amp; pickup time</div>
+                  </div>
+                  <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--bs-border)">
+                    <div style="font-size:12px;font-weight:600;margin-bottom:2px">⏱ Pickup ETA</div>
+                    <div class="text-xs">Predicted hours until pickup from your warehouse</div>
+                  </div>
+                  <div>
+                    <div style="font-size:12px;font-weight:600;margin-bottom:2px">🚚 Delivery Prediction</div>
+                    <div class="text-xs">Estimated days &amp; success rate for this route (last 90 days)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STATE B: results -->
+              <div id="rc-results" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+                <!-- shimmer (shown during loading) -->
+                <div id="rc-shimmer" style="flex:1;padding:10px 12px">
+                  <div class="shimmer-text">✦ Bigship AI is analysing couriers for this route...</div>
+                  <div class="shimmer-wrap" id="rc-shimmer-rows"></div>
+                </div>
+                <!-- actual results -->
+                <div id="rc-data" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+                  <div style="padding:10px 14px;background:#fff;border-bottom:1px solid var(--bs-border);flex-shrink:0">
+                    <div class="filter-bar" id="rc-filter-bar" style="margin-bottom:0">
+                      <div class="fp active" onclick="rcFilter('ai',this)">✦ AI Score</div>
+                      <div class="fp" onclick="rcFilter('cheapest',this)">₹ Cheapest</div>
+                      <div class="fp" onclick="rcFilter('fastest',this)">⚡ Fastest Pickup</div>
+                      <div class="fp" onclick="rcFilter('reliable',this)">🛡 Most Reliable</div>
+                    </div>
+                  </div>
+                  <div
+                    style="padding:7px 12px;background:var(--bs-bg);border-bottom:1px solid var(--bs-border);display:flex;gap:10px;flex-shrink:0">
+                    <span
+                      style="font-size:10px;font-weight:500;color:var(--bs-text-3);text-transform:uppercase;letter-spacing:.05em;flex:1">COURIER</span>
+                    <span
+                      style="font-size:10px;font-weight:500;color:var(--bs-text-3);text-transform:uppercase;letter-spacing:.05em;width:80px;text-align:center">AI
+                      SCORE</span>
+                    <span
+                      style="font-size:10px;font-weight:500;color:var(--bs-text-3);text-transform:uppercase;letter-spacing:.05em;width:80px;text-align:right">RATE</span>
+                    <span style="width:22px"></span>
+                  </div>
+                  <div class="courier-list-wrap" id="rc-courier-list" style="flex:1;max-height:none"></div>
+                  <div class="show-more-link" id="rc-show-more" onclick="showPassedCouriers('rc')" style="display:none">
+                    ▾ Show 2 more couriers (cutoff passed)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 5 — BULK AI ASSIGNMENT
+    ═══════════════════════════════════════ -->
+        <div class="screen page-pad" id="screen-bulk">
+          <div class="page-header">
+            <div>
+              <div class="page-title">✦ AI Bulk Courier Assignment</div>
+              <div class="page-subtitle">Automatically assign the best courier to each unshipped order</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="ai-active-badge">✦ Bigship AI Active</div>
+              <button class="btn btn-outline btn-sm"
+                onclick="showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">← Back to
+                Orders</button>
+            </div>
+          </div>
+          <!-- Upload section -->
+          <div class="card" style="margin-bottom:16px;padding:16px" id="bulk-upload-section">
+            <div class="g2" style="margin-bottom:14px">
+              <div class="f-group">
+                <div class="f-label-std">Shipment Type *</div>
+                <div style="display:flex;gap:14px;padding-top:4px"><label
+                    style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio"
+                      name="btype" value="b2b" checked style="accent-color:var(--bs-purple)"> B2B</label><label
+                    style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="radio"
+                      name="btype" value="b2c" style="accent-color:var(--bs-purple)"> B2C</label></div>
+              </div>
+              <div class="f-group">
+                <div class="f-label-std">Pickup Address *</div><select class="f-select">
+                  <option>Sinola Malsi Store, Delhi, 110011</option>
+                  <option>Bangalore Warehouse</option>
+                </select>
+              </div>
+            </div>
+            <div
+              style="border:2px dashed var(--bs-border);border-radius:8px;padding:22px;text-align:center;background:var(--bs-bg);cursor:pointer;margin-bottom:14px"
+              onclick="bulkUploadSimulate()">
+              <div style="font-size:32px;margin-bottom:8px">📄</div>
+              <div style="font-size:13px;font-weight:500">Click to select CSV/XLSX file</div>
+              <div class="text-xs" style="margin-top:4px">or drag and drop here · Download Sample Data</div>
+            </div>
+            <button class="btn btn-purple" style="width:100%;justify-content:center" id="bulk-assign-btn"
+              onclick="runBulkAssign()">✦ Assign AI to 8 Orders</button>
+          </div>
+          <!-- Results (shown after assign) -->
+          <div id="bulk-results" style="display:none">
+            <!-- Shimmer -->
+            <div id="bulk-shimmer">
+              <div class="shimmer-text">✦ Bigship AI is analysing 8 orders...</div>
+              <div style="padding:10px 0;display:flex;flex-direction:column;gap:7px" id="bulk-shimmer-rows"></div>
+            </div>
+            <!-- Table -->
+            <div id="bulk-table-wrap" style="display:none">
+              <div
+                style="background:#fff;border:1px solid var(--bs-border);border-radius:7px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div style="font-size:13px;font-weight:600" id="bulk-summary">6 / 8 AI Assigned · 1 Needs Review · 1
+                  Manually Set</div>
+                <div style="display:flex;gap:8px">
+                  <span class="status st-assigned">✦ AI Assigned (6)</span>
+                  <span class="status st-review">⚠ Needs Review (1)</span>
+                  <span class="status st-manual">✏ Manual (1)</span>
+                </div>
+              </div>
+              <!-- Progress bar -->
+              <div
+                style="background:#fff;border:1px solid var(--bs-border);border-radius:7px;padding:12px 14px;margin-bottom:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:7px"><span
+                    style="font-size:12px;font-weight:600">AI Assignment Progress</span><span
+                    style="font-size:12px;font-weight:600;color:var(--bs-purple)" id="bulk-prog-pct">6 / 8 orders
+                    assigned</span></div>
+                <div style="height:8px;background:var(--bs-bg);border-radius:4px;overflow:hidden">
+                  <div
+                    style="height:100%;background:linear-gradient(90deg,#007bff,#00B894);border-radius:4px;transition:width 1s ease"
+                    id="bulk-prog-bar"></div>
+                </div>
+              </div>
+              <div class="bulk-table-wrap card">
+                <table class="bulk-table bs-table" id="bulk-table">
+                  <thead>
+                    <tr>
+                      <th style="width:40px"><input type="checkbox" style="accent-color:var(--bs-purple)"
+                          onchange="bulkCheckAll(this)"></th>
+                      <th style="width:110px">Order ID</th>
+                      <th style="width:140px">Route</th>
+                      <th style="width:70px">Weight</th>
+                      <th style="width:130px">AI Courier</th>
+                      <th style="width:90px">Confidence</th>
+                      <th style="width:120px">Cutoff</th>
+                      <th style="width:110px">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bulk-tbody"></tbody>
+                </table>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:14px">
+                <button class="btn btn-green" style="flex:1;justify-content:center;font-size:14px"
+                  onclick="confirmAllBulk()">✓ Confirm All AI Assignments</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 6 — COURIER PRIORITY (Settings)
+    ═══════════════════════════════════════ -->
+        <div class="screen" id="screen-priority" style="flex-direction:column">
+          <div
+            style="padding:12px 20px;background:#fff;border-bottom:1px solid var(--bs-border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:16px;font-weight:600">Courier Priority</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="ai-active-badge">✦ Bigship AI Active</div>
+              <button class="btn btn-blue btn-sm" onclick="cpSave()">💾 Save Priority</button>
+            </div>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:20px">
+            <!-- AI Sort toggle -->
+            <div class="card"
+              style="padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:9px;cursor:pointer" onclick="cpToggle()">
+                <div class="toggle" id="cp-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px">Sort by ✦ Bigship
+                    AI Score <span style="font-size:13px;cursor:pointer;color:var(--bs-text-3)"
+                      title="Reorders couriers based on predicted performance on your warehouse routes over the last 90 days."
+                      id="cp-info-btn">ⓘ</span></div>
+                  <div class="text-xs" style="margin-top:1px">Reorder couriers by predicted performance on your routes
+                  </div>
+                </div>
+              </div>
+              <div id="cp-tooltip"
+                style="display:none;background:var(--bs-navy);color:#fff;border-radius:7px;padding:12px 14px;font-size:12px;line-height:1.6;max-width:300px;margin-left:auto">
+                <div style="font-weight:600;color:#90beff;margin-bottom:6px">✦ How Bigship AI Score works</div>
+                <div>Ranked by <strong>speed, reliability, and pickup time</strong> from your warehouse based on your
+                  last 90 days of shipments.</div>
+              </div>
+            </div>
+            <div
+              style="font-size:12px;font-weight:600;color:var(--bs-text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">
+              Domestic B2C Couriers</div>
+            <div class="cp-grid" id="cp-grid"></div>
+            <div
+              style="font-size:12px;font-weight:600;color:var(--bs-text-2);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 10px">
+              International Couriers</div>
+            <div class="cp-grid" id="cp-intl-grid"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════
+         SCREEN 7 — NDR CENTER
+    ═══════════════════════════════════════ -->
+        <div class="screen page-pad" id="screen-ndr">
+          <div class="page-header">
+            <div>
+              <div class="page-title" style="display:flex;align-items:center;gap:10px">NDR Center <div
+                  class="ai-active-badge">✦ Bigship AI Active</div>
+              </div>
+              <div class="page-subtitle" style="margin-top:4px">✦ Bigship AI analyses failed deliveries and recommends
+                the best reattempt strategy to recover your shipment.</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <span
+                style="background:var(--bs-danger-bg);color:var(--bs-danger);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600">⛔
+                45 Failed</span>
+              <span
+                style="background:var(--bs-warning-bg);color:var(--bs-warning-text);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600">🔄
+                12 Pending</span>
+              <span
+                style="background:var(--bs-success-bg);color:var(--bs-success-text);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600">✓
+                8 Resolved</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">📋 Failed Deliveries — click "View AI Analysis" for reattempt recommendations
+              </div>
+            </div>
+            <table class="bs-table" id="ndr-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Consignee</th>
+                  <th>Original Courier</th>
+                  <th>Failure Reason</th>
+                  <th>✦ AI Reattempt Score</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="ndr-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+      <div class="bs-footer">© 2026 <a href="#">Bigship</a>. All Rights Reserved.</div>
+    </div><!-- /main -->
+  </div><!-- /shell -->
+
+  <!-- BOOKING SUCCESS MODAL -->
+  <div class="modal-bg" id="booking-modal">
+    <div class="modal-box" style="text-align:center">
+      <div style="font-size:44px;margin-bottom:12px">🎉</div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:8px">Order Booked!</div>
+      <div class="text-sm" style="margin-bottom:14px;line-height:1.6">MOVIN will pick up in ~17 hours from Sinola Malsi
+        Store.<br>Bigship AI predicted <strong>82.1%</strong> success rate for this route.</div>
+      <div
+        style="background:var(--bs-bg);border:1px solid var(--bs-border);border-radius:7px;padding:9px 14px;font-size:13px;font-weight:600;color:#007bff;letter-spacing:.5px;margin-bottom:14px">
+        AWB: MOV2026032700841</div>
+      <div
+        style="background:var(--bs-warning-bg);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--bs-warning-text);margin-bottom:16px">
+        📊 After delivery, Bigship AI will send you an accuracy report for this prediction</div>
+      <button class="btn btn-green" style="width:100%;justify-content:center"
+        onclick="document.getElementById('booking-modal').classList.remove('open');showScreen('screen-orders',document.querySelector('[onclick*=screen-orders]'))">View
+        Shipment &amp; Download Label</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="display:none" id="footer-placeholder"></div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    /* ════════════════════════════════
+       DATA
+    ════════════════════════════════ */
+    var DEMO_TIME = 11.5; // 11:30 IST
+
+    var COURIERS = [
+      { id: 'movin', name: 'MOVIN', abbr: 'MOV', color: '#007bff', score: 100, price: 1800, delivery: 6.1, success: 82.1, delta: 8.1, pickup: 17, cutoff: '14:00', cutoffType: 'green', cutoffText: 'Cutoff in 2h 30m ✓', badge: 'top', badgeLabel: '✦ Top Pick', plainEng: 'Best choice for this route today', warn: null, passed: false },
+      { id: 'ltl-del', name: 'LTL Delhivery', abbr: 'LDL', color: '#d63031', score: 93, price: 1750, delivery: 6.2, success: 81.7, delta: 7.7, pickup: 10, cutoff: '14:00', cutoffType: 'green', cutoffText: 'Cutoff in 2h 30m ✓', badge: 'cheap', badgeLabel: 'Cheapest', plainEng: 'Good — above your route average', warn: null, passed: false },
+      { id: 'ltl-xb', name: 'LTL XpressBees', abbr: 'LXB', color: '#0984e3', score: 89, price: 1820, delivery: 8.0, success: 82.1, delta: 8.1, pickup: 41, cutoff: '12:00', cutoffType: 'amber', cutoffText: 'Cutoff in 30m ⚠', badge: 'accurate', badgeLabel: 'Most Accurate', plainEng: 'Good AI score but significantly slower — 8 days delivery', warn: '⚠ 33% slower than fastest option', passed: false },
+      { id: 'bluedart', name: 'Blue Dart', abbr: 'BD', color: '#e84393', score: 83, price: 1785, delivery: 6.2, success: 81.2, delta: 7.2, pickup: 7.5, cutoff: '13:00', cutoffType: 'amber', cutoffText: 'Cutoff in 1h 30m ⚠', badge: null, badgeLabel: null, plainEng: 'Good — above your route average', warn: null, passed: false },
+      { id: 'delb2c', name: 'Delhivery B2C', abbr: 'DEL', color: '#d63031', score: 76, price: 1750, delivery: 6.1, success: 80.8, delta: 6.8, pickup: 9.3, cutoff: '13:00', cutoffType: 'amber', cutoffText: 'Cutoff in 1h 30m ⚠', badge: null, badgeLabel: null, plainEng: 'Just above your route average', warn: null, passed: false },
+      { id: 'ekart', name: 'Ekart', abbr: 'EKT', color: '#E17055', score: 98, price: 1810, delivery: 6.1, success: 82.0, delta: 8.0, pickup: 4, cutoff: '11:00', cutoffType: 'red', cutoffText: 'Cutoff passed ✗', badge: 'fast', badgeLabel: 'Fastest', plainEng: 'Fastest pickup but cutoff has passed', warn: 'Cutoff passed — pickup scheduled for tomorrow', passed: true },
+      { id: 'shadowfax', name: 'Shadowfax', abbr: 'SFX', color: '#636e72', score: 69, price: 1620, delivery: 6.3, success: 80.5, delta: 6.5, pickup: 13, cutoff: '11:00', cutoffType: 'red', cutoffText: 'Cutoff passed ✗', badge: null, badgeLabel: null, plainEng: 'Below your route average — review before booking', warn: '⚠ Below route avg on your warehouse routes', passed: true }
+    ];
+
+    var BULK_ORDERS = [
+      { id: 'BS-2026-0031', route: 'Delhi→New Delhi', wt: '10 kg', courier: 'MOVIN', abbr: 'MOV', color: '#007bff', conf: 100, cutoff: 'green', cutoffT: 'Cutoff in 2h 30m', status: 'assigned', booked: false },
+      { id: 'BS-2026-0032', route: 'Delhi→Mumbai', wt: '5 kg', courier: 'Ekart', abbr: 'EKT', color: '#E17055', conf: 98, cutoff: 'red', cutoffT: 'Cutoff passed', status: 'assigned', booked: false },
+      { id: 'BS-2026-0033', route: 'Delhi→Bengaluru', wt: '8 kg', courier: 'LTL Delhivery', abbr: 'LDL', color: '#d63031', conf: 93, cutoff: 'green', cutoffT: 'Cutoff in 2h 30m', status: 'assigned', booked: false },
+      { id: 'BS-2026-0034', route: 'Delhi→Hyderabad', wt: '12 kg', courier: 'LTL DP World', abbr: 'LDP', color: '#00b894', conf: 88, cutoff: 'amber', cutoffT: 'Cutoff in 30m', status: 'review', booked: false },
+      { id: 'BS-2026-0035', route: 'Delhi→Chennai', wt: '3 kg', courier: 'Blue Dart', abbr: 'BD', color: '#e84393', conf: 83, cutoff: 'amber', cutoffT: 'Cutoff in 1h 30m', status: 'assigned', booked: false },
+      { id: 'BS-2026-0036', route: 'Delhi→Pune', wt: '6 kg', courier: 'Delhivery B2C', abbr: 'DEL', color: '#d63031', conf: 76, cutoff: 'amber', cutoffT: 'Cutoff in 1h 30m', status: 'manual', booked: false },
+      { id: 'BS-2026-0037', route: 'Delhi→Kolkata', wt: '20 kg', courier: '—', abbr: '?', color: '#9CA3AF', conf: 0, cutoff: 'red', cutoffT: 'Review needed', status: 'review', booked: false },
+      { id: 'BS-2026-0038', route: 'Delhi→Jaipur', wt: '4 kg', courier: 'Shadowfax', abbr: 'SFX', color: '#636e72', conf: 69, cutoff: 'red', cutoffT: 'Cutoff passed', status: 'assigned', booked: false }
+    ];
+
+    var NDR_ORDERS = [
+      { id: 'BS-2026-0021', consignee: 'Rahul Sharma', origCourier: 'Shadowfax', fail: 'Customer Unavailable', origScore: 61, recCourier: 'MOVIN', recColor: '#007bff', recAbbr: 'MOV', delta: 21, expanded: false, feedbackDone: false },
+      { id: 'BS-2026-0019', consignee: 'Priya Electronics', origCourier: 'XpressBees', fail: 'Wrong Address', origScore: 68, recCourier: 'Ekart', recColor: '#E17055', recAbbr: 'EKT', delta: 14, expanded: false, feedbackDone: false },
+      { id: 'BS-2026-0017', consignee: 'Mumbai Traders', origCourier: 'LTL TCI Express', fail: 'Shipment Damaged', origScore: 64, recCourier: 'Blue Dart', recColor: '#e84393', recAbbr: 'BD', delta: 18, expanded: false, feedbackDone: false }
+    ];
+
+    var CP_DOMESTIC = [
+      { name: 'MOVIN', abbr: 'MOV', color: '#007bff', aiScore: 100, success: '82.1%', type: 'Surface', enabled: true, warn: false },
+      { name: 'Ekart', abbr: 'EKT', color: '#E17055', aiScore: 98, success: '82.0%', type: 'Surface', enabled: true, warn: false },
+      { name: 'LTL Delhivery', abbr: 'LDL', color: '#d63031', aiScore: 93, success: '81.7%', type: 'LTL', enabled: true, warn: false },
+      { name: 'LTL XpressBees', abbr: 'LXB', color: '#0984e3', aiScore: 89, success: '82.1%', type: 'LTL', enabled: true, warn: false },
+      { name: 'Blue Dart', abbr: 'BD', color: '#e84393', aiScore: 83, success: '81.2%', type: 'Air', enabled: true, warn: false },
+      { name: 'Delhivery B2C', abbr: 'DEL', color: '#d63031', aiScore: 76, success: '80.8%', type: 'Surface', enabled: true, warn: false },
+      { name: 'Shadowfax', abbr: 'SFX', color: '#636e72', aiScore: 69, success: '69%', type: 'Surface', enabled: true, warn: true },
+      { name: 'LTL TCI Express', abbr: 'TCI', color: '#2d3436', aiScore: 40, success: '62.3%', type: 'LTL', enabled: false, warn: true }
+    ];
+    var CP_INTL = [
+      { name: 'FedEx Express', abbr: 'FDX', color: '#4D148C', aiScore: 94, success: '91.2%', type: 'Air', enabled: true, warn: false },
+      { name: 'DHL', abbr: 'DHL', color: '#CC0000', aiScore: 91, success: '89.7%', type: 'Air', enabled: true, warn: false },
+      { name: 'Aramex', abbr: 'ARX', color: '#EF4444', aiScore: 82, success: '84.1%', type: 'Surface', enabled: true, warn: false },
+      { name: 'UPS', abbr: 'UPS', color: '#5E3C1B', aiScore: 78, success: '82.5%', type: 'Air', enabled: false, warn: false }
+    ];
+
+    var openCard = {}; // tracks which courier row is open per list
+    var feedbackState = {}; // tracks feedback given
+    var passedVisible = {};
+    var cpAISorted = false;
+    var rcResultsShown = false;
+
+    /* ════════════════════════════════
+       NAVIGATION
+    ════════════════════════════════ */
+    var BREADCRUMBS = {
+      'screen-dashboard': 'Dashboard / <span>Overview</span>',
+      'screen-orders': 'Dashboard / My Orders / <span>Unshipped</span>',
+      'screen-addorder': 'Dashboard / My Orders / <span>Add Order</span>',
+      'screen-ratecalc': 'Dashboard / <span>Rate Calculator</span>',
+      'screen-bulk': 'Dashboard / My Orders / <span>Bulk AI Assignment</span>',
+      'screen-priority': 'Dashboard / Settings / <span>Courier Priority</span>',
+      'screen-ndr': 'Dashboard / <span>NDR Center</span>'
+    };
+
+    function showScreen(id, navEl) {
+      document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
+      document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
+      var target = document.getElementById(id);
+      if (target) target.classList.add('active');
+      if (navEl) navEl.classList.add('active');
+      document.getElementById('breadcrumb').innerHTML = BREADCRUMBS[id] || 'Dashboard / <span>—</span>';
+      document.getElementById('content').scrollTop = 0;
+      // init screens
+      if (id === 'screen-orders') initOrders();
+      if (id === 'screen-addorder') initAddOrder();
+      if (id === 'screen-priority') initCPSettings();
+      if (id === 'screen-ndr') initNDR();
+      if (id === 'screen-bulk') initBulk();
+      if (id === 'screen-ratecalc' && rcResultsShown) { /* keep state */ }
+    }
+
+    /* ════════════════════════════════
+       CALLOUT COLLAPSE (Mandate 8)
+    ════════════════════════════════ */
+    function collapseCallout(key) {
+      document.getElementById('callout-' + key + '-full').style.display = 'none';
+      document.getElementById('callout-' + key + '-strip').style.display = 'flex';
+      sessionStorage.setItem('callout-' + key, 'collapsed');
+    }
+    function expandCallout(key) {
+      document.getElementById('callout-' + key + '-full').style.display = 'block';
+      document.getElementById('callout-' + key + '-strip').style.display = 'none';
+      sessionStorage.removeItem('callout-' + key);
+    }
+    function initCallout(key) {
+      if (sessionStorage.getItem('callout-' + key) === 'collapsed') collapseCallout(key);
+    }
+
+    /* ════════════════════════════════
+       COURIER ROW RENDERING
+    ════════════════════════════════ */
+    function renderCourierList(containerId, couriers, showPassedKey) {
+      passedVisible[showPassedKey] = false;
+      var visible = couriers.filter(function (c) { return !c.passed; });
+      var passed = couriers.filter(function (c) { return c.passed; });
+      var html = visible.map(function (c, i) { return courierRowHTML(c, i, containerId); }).join('');
+      var passedHTML = passed.map(function (c, i) { return courierRowHTML(c, visible.length + i, containerId); }).join('');
+      document.getElementById(containerId).innerHTML = html + '<div id="' + containerId + '-passed" style="display:none">' + passedHTML + '</div>';
+      // staggered score bar animation
+      setTimeout(function () {
+        var rows = document.getElementById(containerId).querySelectorAll('.c-score-fill');
+        rows.forEach(function (bar, i) {
+          setTimeout(function () { bar.style.width = bar.dataset.target + '%'; }, i * 80);
+        });
+      }, 100);
+      // show/hide show-more link
+      var showMoreId = containerId.replace('-list', '') + '-show-more';
+      var sm = document.getElementById(showMoreId);
+      if (sm) sm.style.display = passed.length > 0 ? 'block' : 'none';
+      // auto-expand first (non-passed)
+      if (visible.length > 0) {
+        setTimeout(function () { toggleCourierRow(visible[0].id, containerId); }, 200);
+      }
+    }
+
+    function courierRowHTML(c, idx, listId) {
+      var feedKey = listId + '-' + c.id;
+      var isTop = idx === 0 && !c.passed;
+      return '<div class="c-row' + (c.passed ? ' passed' : '' + (isTop ? ' top-row' : '')) + '" id="crow-' + listId + '-' + c.id + '">' +
+        '<div class="c-compact" onclick="toggleCourierRow(\'' + c.id + '\',\'' + listId + '\')">' +
+        '<div class="c-logo" style="background:' + c.color + '15;color:' + c.color + ';border-color:' + c.color + '30">' + c.abbr + '</div>' +
+        '<div class="c-name-col">' +
+        '<div class="c-name">' +
+        (c.passed ? '<span style="text-decoration:line-through;opacity:.6">' + c.name + '</span>' : '<strong>' + c.name + '</strong>') +
+        (c.badgeLabel ? '<span class="c-badge badge-' + c.badge + '">' + c.badgeLabel + '</span>' : '') +
+        '</div>' +
+        '</div>' +
+        '<div class="c-score-bar-wrap">' +
+        '<div class="c-score-track"><div class="c-score-fill" data-target="' + c.score + '" style="width:0%"></div></div>' +
+        '<span class="c-score-pct">' + c.score + '%</span>' +
+        '</div>' +
+        '<span style="font-size:13px;font-weight:600;flex-shrink:0">₹' + c.price.toLocaleString('en-IN') + '</span>' +
+        '<span class="cutoff ' + getCutoffClass(c.cutoffType) + '">' + c.cutoffText + '</span>' +
+        '<div class="c-expand-btn" id="cexp-' + listId + '-' + c.id + '">▸</div>' +
+        '</div>' +
+        '<div class="c-detail" id="cdet-' + listId + '-' + c.id + '">' +
+        '<div class="c-chips-row">' +
+        '<span class="chip chip-pickup">⏱ Pickup in ~' + c.pickup + 'h</span>' +
+        '<span class="chip chip-delivery">🚚 ~' + c.delivery + ' days</span>' +
+        '<span class="chip chip-success">✓ ~' + c.success + '% <small style="color:var(--bs-success-text)">(+' + c.delta + '% vs avg)</small></span>' +
+        '</div>' +
+        /* Mandate 2: AI fields */
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px">' +
+        '<div class="field-ai"><div class="f-label">⏱ Pickup ETA</div><div class="f-val">~' + c.pickup + 'h</div><div class="f-explain">Pickup expected in ~' + c.pickup + ' hours from now</div></div>' +
+        '<div class="field-ai"><div class="f-label">🚚 Delivery</div><div class="f-val">~' + c.delivery + ' days</div><div class="f-explain">Estimated delivery in ~' + Math.round(c.delivery) + ' days</div></div>' +
+        '<div class="field-ai"><div class="f-label">✓ Success Rate</div><div class="f-val" style="color:var(--bs-success)">~' + c.success + '% <span style="font-size:10px">(+' + c.delta + '%)</span></div><div class="f-explain">' + c.success + '% of shipments delivered on time · ' + c.delta + '% better than avg</div></div>' +
+        '</div>' +
+        /* Plain english (Mandate 3) */
+        '<div class="c-plain-english">' + c.plainEng + '</div>' +
+        /* Warning with action (Mandate 5) */
+        (c.warn && !c.passed ? '<div class="c-warn-bar">⚠ ' + c.warn + '<button class="c-warn-action" onclick="switchToMOVIN(\'' + listId + '\')">Switch to MOVIN →</button></div>' : '') +
+        (c.passed ? '<div style="background:var(--bs-danger-bg);border-radius:6px;padding:7px 10px;margin-bottom:8px;font-size:12px;color:var(--bs-danger)">⛔ This courier\'s pickup window has closed for today. Booking now will schedule for tomorrow.</div>' : '') +
+        /* Provenance */
+        '<div class="c-provenance">✦ Bigship AI · 2,41,847 shipments analysed · Delhi → New Delhi · last 90 days</div>' +
+        /* Feedback (only top 2) */
+        (idx < 2 ? '<div class="feedback-row"><span class="feedback-label">Was this helpful?</span><span class="fb-btn" id="fb-up-' + feedKey + '" onclick="giveFeedback(\'' + feedKey + '\',\'up\')">👍</span><span class="fb-btn" id="fb-down-' + feedKey + '" onclick="giveFeedback(\'' + feedKey + '\',\'down\')">👎</span></div>' : '') +
+        /* Select button (for non-passed) */
+        (!c.passed ? '<button class="btn btn-green btn-sm" style="margin-top:8px;width:100%" onclick="selectCourier(\'' + c.id + '\',\'' + c.name + '\',' + c.price + ')">Select ' + c.name + ' →</button>' : '') +
+        '</div>' +
+        '</div>';
+    }
+
+    function getCutoffClass(t) {
+      if (t === 'green') return 'cutoff-green';
+      if (t === 'amber') return 'cutoff-amber';
+      return 'cutoff-red';
+    }
+
+    function toggleCourierRow(courierId, listId) {
+      var detId = 'cdet-' + listId + '-' + courierId;
+      var expId = 'cexp-' + listId + '-' + courierId;
+      var det = document.getElementById(detId);
+      var exp = document.getElementById(expId);
+      if (!det) return;
+      var key = listId;
+      // close previous
+      if (openCard[key] && openCard[key] !== courierId) {
+        var prevDet = document.getElementById('cdet-' + listId + '-' + openCard[key]);
+        var prevExp = document.getElementById('cexp-' + listId + '-' + openCard[key]);
+        if (prevDet) prevDet.classList.remove('open');
+        if (prevExp) prevExp.classList.remove('open');
+      }
+      var isOpen = det.classList.toggle('open');
+      exp.classList.toggle('open', isOpen);
+      openCard[key] = isOpen ? courierId : null;
+      if (isOpen) {
+        setTimeout(function () {
+          var fill = det.querySelector('.c-score-fill') || det.previousElementSibling && det.previousElementSibling.querySelector('.c-score-fill');
+          // animate AI fields bars on expand not needed separately, done on list render
+        }, 50);
+      }
+    }
+
+    function showPassedCouriers(key) {
+      var listId = key + '-courier-list';
+      var passedDiv = document.getElementById(listId + '-passed');
+      if (passedDiv) { passedDiv.style.display = 'block'; }
+      var sm = document.getElementById(key + '-show-more');
+      if (sm) sm.style.display = 'none';
+      // animate score bars for newly shown passed rows
+      if (passedDiv) {
+        setTimeout(function () {
+          passedDiv.querySelectorAll('.c-score-fill').forEach(function (b) { b.style.width = b.dataset.target + '%'; });
+        }, 50);
+      }
+    }
+
+    function selectCourier(id, name, price) {
+      // Update sticky bar
+      document.getElementById('sticky-name').textContent = name;
+      document.getElementById('sticky-price').textContent = '₹' + price.toLocaleString('en-IN');
+      document.getElementById('ao-sticky').style.display = 'flex';
+      showToast('✦ ' + name + ' selected · ₹' + price.toLocaleString('en-IN') + ' · Ready to confirm');
+    }
+
+    function switchToMOVIN(listId) {
+      selectCourier('movin', 'MOVIN', 1800);
+      showToast('✦ Switched to MOVIN — Top Pick for this route');
+    }
+
+    /* ════════════════════════════════
+       FEEDBACK (Mandate 9)
+    ════════════════════════════════ */
+    function giveFeedback(key, type) {
+      if (feedbackState[key]) return;
+      feedbackState[key] = type;
+      var upBtn = document.getElementById('fb-up-' + key);
+      var dnBtn = document.getElementById('fb-down-' + key);
+      if (!upBtn || !dnBtn) return;
+      if (type === 'up') {
+        upBtn.classList.add('up-active'); dnBtn.disabled = true; dnBtn.style.opacity = '.3';
+        showToast('Glad it helped! · Bigship AI learns from your feedback. 🙏');
+      } else {
+        dnBtn.classList.add('down-active'); upBtn.disabled = true; upBtn.style.opacity = '.3';
+        showToast("Noted · We'll improve recommendations for this route. 🔧");
+      }
+      upBtn.disabled = true; dnBtn.disabled = true;
+      // also for confirmation screen
+      var fbConf = key === 'conf' ? null : null;
+    }
+    // For confirmation screen separate feedback
+    function giveFeedback(key, type) {
+      if (feedbackState[key]) return;
+      feedbackState[key] = type;
+      var upBtn = document.getElementById('fb-' + key + '-up') || document.getElementById('fb-up-' + key);
+      var dnBtn = document.getElementById('fb-' + key + '-down') || document.getElementById('fb-down-' + key);
+      if (!upBtn) return;
+      if (type === 'up') { upBtn.className = 'fb-btn up-active'; if (dnBtn) { dnBtn.disabled = true; dnBtn.style.opacity = '.3'; } showToast('Glad it helped! · Bigship AI learns from your feedback 🙏'); }
+      else { if (dnBtn) dnBtn.className = 'fb-btn down-active'; upBtn.disabled = true; upBtn.style.opacity = '.3'; showToast("Noted · We'll improve recommendations for this route 🔧"); }
+      if (upBtn) upBtn.disabled = true; if (dnBtn) dnBtn.disabled = true;
+    }
+
+    /* ════════════════════════════════
+       FILTER PILLS
+    ════════════════════════════════ */
+    function aoFilter(type, el) {
+      document.querySelectorAll('#ao-filters .fp').forEach(function (p) { p.classList.remove('active'); });
+      el.classList.add('active');
+      filterAndRender(type, 'ao-courier-list', 'ao');
+    }
+    function rcFilter(type, el) {
+      document.querySelectorAll('#rc-filter-bar .fp').forEach(function (p) { p.classList.remove('active'); });
+      el.classList.add('active');
+      filterAndRender(type, 'rc-courier-list', 'rc');
+    }
+    function filterAndRender(type, listId, key) {
+      var list = document.getElementById(listId);
+      list.style.opacity = '0'; list.style.transform = 'translateY(4px)';
+      setTimeout(function () {
+        var sorted = COURIERS.slice();
+        if (type === 'ai') sorted.sort(function (a, b) { return (b.passed === a.passed) ? (b.score - a.score) : (a.passed ? 1 : -1); });
+        else if (type === 'cheapest') sorted.sort(function (a, b) { return (b.passed === a.passed) ? (a.price - b.price) : (a.passed ? 1 : -1); });
+        else if (type === 'fastest') sorted.sort(function (a, b) { return (b.passed === a.passed) ? (a.pickup - b.pickup) : (a.passed ? 1 : -1); });
+        else if (type === 'reliable') sorted.sort(function (a, b) { return (b.passed === a.passed) ? (b.success - a.success) : (a.passed ? 1 : -1); });
+        openCard[key] = null;
+        renderCourierList(listId, sorted, key);
+        list.style.opacity = '1'; list.style.transform = 'translateY(0)';
+        list.style.transition = 'opacity .2s,transform .2s';
+      }, 150);
+    }
+
+    /* ════════════════════════════════
+       ADD ORDER INIT
+    ════════════════════════════════ */
+    function initAddOrder() {
+      var sorted = COURIERS.slice().sort(function (a, b) { return (b.passed === a.passed) ? (b.score - a.score) : (a.passed ? 1 : -1); });
+      openCard['ao-courier-list'] = null;
+      renderCourierList('ao-courier-list', sorted, 'ao');
+      document.getElementById('ao-step3').style.display = 'block';
+      document.getElementById('ao-step4').style.display = 'none';
+      document.getElementById('ao-sticky').style.display = 'none';
+      initCallout('ao');
+    }
+    function goToStep4() {
+      document.getElementById('ao-step3').style.display = 'none';
+      document.getElementById('ao-step4').style.display = 'block';
+      document.getElementById('ao-sticky').style.display = 'none';
+      // update stepper
+      document.getElementById('step3-circle').className = 'step-circle sc-done'; document.getElementById('step3-circle').textContent = '✓';
+      document.getElementById('step3-label').className = 'step-label done';
+      document.getElementById('step4-circle').className = 'step-circle sc-active';
+      document.getElementById('step4-label').className = 'step-label active';
+      document.getElementById('line3').className = 'step-line sl-done';
+      // animate score bar
+      setTimeout(function () { document.querySelectorAll('.conf-score-bar').forEach(function (b) { b.style.width = '100%'; }) }, 300);
+      document.getElementById('content').scrollTop = 0;
+    }
+    function backToStep3() {
+      document.getElementById('ao-step3').style.display = 'block';
+      document.getElementById('ao-step4').style.display = 'none';
+      document.getElementById('ao-sticky').style.display = 'flex';
+      document.getElementById('step3-circle').className = 'step-circle sc-active'; document.getElementById('step3-circle').textContent = '3';
+      document.getElementById('step3-label').className = 'step-label active';
+      document.getElementById('step4-circle').className = 'step-circle sc-pending';
+      document.getElementById('step4-label').className = 'step-label pending';
+      document.getElementById('line3').className = 'step-line sl-pending';
+    }
+    function bookOrder() {
+      var btn = event.target;
+      btn.innerHTML = '<span class="spinner"></span> Booking Order…'; btn.disabled = true;
+      setTimeout(function () { btn.innerHTML = '📦 Book Order & Generate Label'; btn.disabled = false; document.getElementById('booking-modal').classList.add('open'); }, 1600);
+    }
+
+    /* ════════════════════════════════
+       RATE CALCULATOR
+    ════════════════════════════════ */
+    function rcCheckPrice() {
+      var btn = document.getElementById('rc-check-btn');
+      btn.innerHTML = '<span class="spinner"></span> Analysing...'; btn.disabled = true;
+      document.getElementById('rc-empty').style.display = 'none';
+      document.getElementById('rc-results').style.display = 'flex';
+      document.getElementById('rc-shimmer').style.display = 'block';
+      document.getElementById('rc-data').style.display = 'none';
+      // build shimmer rows
+      var sh = '';
+      for (var i = 0; i < 5; i++) sh += '<div class="shimmer-row"><div class="shimmer-block" style="width:32px;height:32px;border-radius:7px;flex-shrink:0"></div><div style="flex:1"><div class="shimmer-block" style="height:13px;width:60%;margin-bottom:6px"></div><div class="shimmer-block" style="height:4px;width:40%"></div></div><div class="shimmer-block" style="width:60px;height:13px"></div></div>';
+      document.getElementById('rc-shimmer-rows').innerHTML = sh;
+      document.getElementById('rc-right-sub').innerHTML = '<span style="color:#90beff;font-size:12px">✦ Bigship AI is analysing couriers for this route...</span>';
+      setTimeout(function () {
+        btn.innerHTML = '🤖 CHECK PRICE'; btn.disabled = false;
+        document.getElementById('rc-shimmer').style.display = 'none';
+        document.getElementById('rc-data').style.display = 'flex';
+        document.getElementById('rc-right-sub').innerHTML = '<span class="ai-active-badge" style="font-size:10px;padding:2px 8px">✦ Bigship AI Active</span> 7 couriers · Delhi → New Delhi · last 90 days';
+        document.getElementById('rc-ai-rec').style.display = 'block';
+        var sorted = COURIERS.slice().sort(function (a, b) { return (b.passed === a.passed) ? (b.score - a.score) : (a.passed ? 1 : -1); });
+        openCard['rc-courier-list'] = null;
+        renderCourierList('rc-courier-list', sorted, 'rc');
+        rcResultsShown = true;
+      }, 1400);
+    }
+
+    /* ════════════════════════════════
+       ORDERS TABLE
+    ════════════════════════════════ */
+    var ORDERS_DATA = [
+      { id: '226094878', date: 'Mar 25', consignee: 'Testing', status: 'unshipped', rec: 'MOVIN', score: 100, cutoff: 'green' },
+      { id: '122217482', date: 'Mar 25', consignee: 'Testing', status: 'unshipped', rec: 'Ekart', score: 98, cutoff: 'red' },
+      { id: '321775012', date: 'Mar 25', consignee: 'Testing', status: 'unshipped', rec: 'LTL Delhivery', score: 93, cutoff: 'green' },
+      { id: '470237663', date: 'Mar 25', consignee: 'Testing', status: 'warn', rec: '⚠ 2 couriers tied', score: 0, cutoff: 'amber' },
+      { id: '1778305935', date: 'Mar 25', consignee: 'Testing', status: 'unshipped', rec: 'Blue Dart', score: 83, cutoff: 'amber' }
+    ];
+    function initOrders() {
+      var tb = document.getElementById('orders-tbody');
+      tb.innerHTML = ORDERS_DATA.map(function (o) {
+        var isWarn = o.status === 'warn';
+        var scoreBar = o.score > 0 ? '<div style="width:48px;height:4px;background:rgba(0,0,0,.08);border-radius:2px;display:inline-block;vertical-align:middle;overflow:hidden;margin-left:5px"><div style="height:100%;background:linear-gradient(90deg,#007bff,#00B894);border-radius:2px;width:' + o.score + '%"></div></div>' : '';
+        return '<tr class="' + (isWarn ? 'warn-row' : '') + '" onclick="showScreen(\'screen-addorder\',document.querySelector(\'[onclick*=screen-addorder]\'))">' +
+          '<td><input type="checkbox" style="accent-color:var(--bs-purple)" onclick="event.stopPropagation()"></td>' +
+          '<td><div class="t-id">' + o.id + '</div><div class="t-sub">' + o.date + '</div></td>' +
+          '<td>' + o.date + ', 2026</td>' +
+          '<td>' + o.consignee + '</td>' +
+          '<td><span class="status st-unshipped">Unshipped</span></td>' +
+          '<td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">' +
+          '<span style="font-size:12px;font-weight:600;color:var(--bs-purple)">' + o.rec + '</span>' +
+          scoreBar +
+          '<span class="cutoff ' + getCutoffClass(o.cutoff) + '" style="font-size:10px;padding:2px 7px">' +
+          (o.cutoff === 'green' ? '✓ 2h 30m' : (o.cutoff === 'amber' ? '⚠ 1h 30m' : '⛔ Passed')) +
+          '</span>' +
+          '</div></td>' +
+          '<td onclick="event.stopPropagation()"><button class="btn btn-green btn-xs" onclick="showScreen(\'screen-addorder\',document.querySelector(\'[onclick*=screen-addorder]\'))">Book →</button></td>' +
+          '</tr>';
+      }).join('');
+      initCallout('orders');
+    }
+    function selectAllOrders(cb) { document.querySelectorAll('#orders-tbody input[type=checkbox]').forEach(function (c) { c.checked = cb.checked; }); }
+
+    /* ════════════════════════════════
+       BULK ASSIGNMENT
+    ════════════════════════════════ */
+    function initBulk() { /* state preserved */ }
+    function bulkUploadSimulate() { showToast('✦ File selected · Click "Assign AI to 8 Orders" to continue'); }
+    function runBulkAssign() {
+      var btn = document.getElementById('bulk-assign-btn');
+      btn.innerHTML = '<span class="spinner"></span> Assigning AI Couriers…'; btn.disabled = true;
+      document.getElementById('bulk-results').style.display = 'block';
+      document.getElementById('bulk-shimmer').style.display = 'block';
+      document.getElementById('bulk-table-wrap').style.display = 'none';
+      // shimmer
+      var sh = '<div class="shimmer-text">✦ Bigship AI is analysing 8 orders...</div>';
+      for (var i = 0; i < 8; i++) sh += '<div class="shimmer-row"><div class="shimmer-block" style="width:90px;height:12px"></div><div class="shimmer-block" style="width:120px;height:12px;margin-left:10px"></div><div class="shimmer-block" style="width:80px;height:12px;margin-left:auto"></div></div>';
+      document.getElementById('bulk-shimmer').innerHTML = sh;
+      setTimeout(function () {
+        btn.innerHTML = '✦ Assign AI to 8 Orders'; btn.disabled = false;
+        document.getElementById('bulk-shimmer').style.display = 'none';
+        document.getElementById('bulk-table-wrap').style.display = 'block';
+        renderBulkTable();
+        var prog = document.getElementById('bulk-prog-bar');
+        if (prog) { setTimeout(function () { prog.style.width = '75%'; }, 100); }
+        showToast('✦ AI assignment complete — 6/8 assigned, 1 conflict needs resolution');
+      }, 1400);
+    }
+    function renderBulkTable() {
+      var tb = document.getElementById('bulk-tbody');
+      tb.innerHTML = BULK_ORDERS.map(function (o, idx) {
+        var statusHTML, st;
+        if (o.booked) { st = '<span class="status st-booked">✓ Booked</span>'; }
+        else if (o.status === 'assigned') st = '<span class="status st-assigned">✦ AI Assigned</span>';
+        else if (o.status === 'review') st = '<span class="status st-review">⚠ Needs Review</span>';
+        else st = '<span class="status st-manual">✏ Manual</span>';
+        var courierCell = o.courier !== '—' ?
+          '<div style="display:flex;align-items:center;gap:5px"><div style="width:20px;height:20px;border-radius:4px;background:' + o.color + '15;color:' + o.color + ';border:1px solid ' + o.color + '30;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;flex-shrink:0">' + o.abbr + '</div><span style="font-size:12px;font-weight:600">' + o.courier + '</span></div>' :
+          '<span style="font-size:12px;color:var(--bs-warning-text)">⚠ Manual selection needed</span>';
+        var confBar = o.conf > 0 ? '<div class="conf-bar"><div class="conf-fill" style="width:' + o.conf + '%"></div></div> <span style="font-size:11px;font-weight:600;color:var(--bs-purple);vertical-align:middle">' + o.conf + '%</span>' : '<span style="font-size:11px;color:var(--bs-text-3)">—</span>';
+        var actionBtn = o.booked ? '' : '<button class="btn btn-xs ' + (o.status === 'review' ? 'btn-outline' : 'btn-green') + '" onclick="bookSingleBulk(' + idx + ')">' + (o.status === 'review' ? 'Review' : 'Book') + '</button>';
+        return '<tr id="bulkrow-' + idx + '"><td><input type="checkbox" style="accent-color:var(--bs-purple)" class="bulk-cb" data-idx="' + idx + '"></td><td><span class="t-id" style="font-size:12px">' + o.id + '</span></td><td style="font-size:12px">' + o.route + '</td><td style="font-size:12px">' + o.wt + '</td><td>' + courierCell + '</td><td>' + confBar + '</td><td><span class="cutoff ' + getCutoffClass(o.cutoff) + '" style="font-size:10px;padding:2px 6px">' + o.cutoffT + '</span></td><td>' + st + ' ' + actionBtn + '</td></tr>';
+      }).join('');
+      setTimeout(function () { document.querySelectorAll('.conf-fill').forEach(function (f) { var w = f.style.width; f.style.width = '0'; setTimeout(function () { f.style.width = w; }, 50); }); }, 100);
+    }
+    function bulkCheckAll(cb) { document.querySelectorAll('.bulk-cb').forEach(function (c) { c.checked = cb.checked; }); }
+    function bookSingleBulk(idx) { BULK_ORDERS[idx].booked = true; renderBulkTable(); showToast('✓ ' + BULK_ORDERS[idx].id + ' booked — label generating'); }
+    function confirmAllBulk() { BULK_ORDERS.filter(function (o) { return o.status === 'assigned'; }).forEach(function (o) { o.booked = true; }); renderBulkTable(); showToast('🎉 All AI-assigned orders booked — labels are generating'); }
+
+    /* ════════════════════════════════
+       COURIER PRIORITY
+    ════════════════════════════════ */
+    function initCPSettings() { renderCPGrid(CP_DOMESTIC, 'cp-grid', false); renderCPGrid(CP_INTL, 'cp-intl-grid', false); }
+    function renderCPGrid(data, gridId, aiSorted) {
+      var sorted = aiSorted ? data.slice().sort(function (a, b) { return b.aiScore - a.aiScore; }) : data;
+      var g = document.getElementById(gridId);
+      if (!g) return;
+      g.innerHTML = sorted.map(function (c, i) {
+        var rankColors = ['background:linear-gradient(135deg,#010F5A,#007bff);color:#fff', 'background:#EFF6FF;color:#1E40AF', 'background:var(--bs-success-bg);color:var(--bs-success-text)', 'background:var(--bs-bg);color:var(--bs-text-2)'];
+        var rc = rankColors[Math.min(i, 3)];
+        return '<div class="cp-card' + (c.warn ? ' warn-courier' : '') + '">' +
+          '<div class="cp-num" style="' + rc + '">' + (i + 1) + '</div>' +
+          '<span class="cp-ai-badge">✦ AI ' + c.aiScore + '%</span>' +
+          '<div class="cp-logo" style="background:' + c.color + '15;color:' + c.color + ';border-color:' + c.color + '30">' + c.abbr + '</div>' +
+          '<div class="cp-name">' + c.name + '</div>' +
+          '<div style="font-size:10px;color:var(--bs-text-3)">' + c.type + '</div>' +
+          '<div class="cp-success' + (c.warn ? ' warn' : ' good') + '">Avg ' + (c.warn ? '⚠ ' : '') + c.success + '</div>' +
+          (c.warn ? '<div style="font-size:10px;color:var(--bs-warning-text);text-align:center;margin-top:2px">⚠ Low success rate</div>' : '') +
+          '<div class="cp-toggle-row">' +
+          '<div class="toggle' + (c.enabled ? ' on' : '') + '" onclick="cpToggleCourier(this,\'' + c.name + '\')"><div class="toggle-knob"></div></div>' +
+          '<span style="font-size:10px;color:var(--bs-text-3)">' + (c.enabled ? 'Active' : 'Paused') + '</span>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+    }
+    function cpToggle() {
+      cpAISorted = !cpAISorted;
+      var tog = document.getElementById('cp-toggle');
+      tog.classList.toggle('on', cpAISorted);
+      var g = document.getElementById('cp-grid');
+      g.style.opacity = '0'; g.style.transform = 'translateY(4px)';
+      setTimeout(function () {
+        renderCPGrid(CP_DOMESTIC, 'cp-grid', cpAISorted);
+        g.style.opacity = '1'; g.style.transform = 'translateY(0)';
+        g.style.transition = 'opacity .3s,transform .3s';
+        showToast(cpAISorted ? '✦ Couriers sorted by Bigship AI Score' : '✏ Manual ordering restored');
+      }, 300);
+    }
+    function cpToggleCourier(toggle, name) {
+      toggle.classList.toggle('on');
+      var on = toggle.classList.contains('on');
+      toggle.nextElementSibling.textContent = on ? 'Active' : 'Paused';
+      showToast((on ? '✓ ' : '⏸ ') + name + (on ? ' activated' : ' paused'));
+    }
+    function cpSave() { showToast('✓ Courier priority saved successfully'); }
+
+    /* ════════════════════════════════
+       NDR CENTER
+    ════════════════════════════════ */
+    function initNDR() {
+      var tb = document.getElementById('ndr-tbody');
+      tb.innerHTML = NDR_ORDERS.map(function (o, idx) {
+        var gainBadge = o.delta > 0 ?
+          '<span style="background:rgba(108,92,231,.1);color:var(--bs-purple);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:600">✦ +' + o.delta + '% with ' + o.recCourier + '</span>' :
+          '<span style="font-size:11px;color:var(--bs-text-3)">Same courier recommended</span>';
+        return '<tr id="ndrow-' + idx + '" onclick="ndrExpand(' + idx + ')" style="cursor:pointer">' +
+          '<td><div class="t-id">' + o.id + '</div></td>' +
+          '<td>' + o.consignee + '</td>' +
+          '<td><span style="font-weight:600">' + o.origCourier + '</span></td>' +
+          '<td><span class="chip chip-warn">' + o.fail + '</span></td>' +
+          '<td>' + gainBadge + '</td>' +
+          '<td onclick="event.stopPropagation()"><span style="color:var(--bs-purple);font-weight:600;cursor:pointer;font-size:12px" onclick="ndrExpand(' + idx + ')">View AI Analysis →</span></td>' +
+          '</tr>' +
+          '<tr id="ndrexp-' + idx + '" style="display:none"><td colspan="6" style="padding:0;background:var(--bs-bg)">' +
+          ndrExpandHTML(o, idx) +
+          '</td></tr>';
+      }).join('');
+    }
+    function ndrExpandHTML(o, idx) {
+      var noSwitch = o.delta === 0;
+      return '<div style="padding:16px 20px">' +
+        '<div style="font-size:12px;font-weight:600;color:var(--bs-text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span class="ai-active-badge" style="font-size:10px">✦ Bigship AI</span> Reattempt Success Analysis</div>' +
+        '<div class="ndr-compare">' +
+        /* Card A */
+        '<div class="ndr-opt">' +
+        '<div class="ndr-opt-head"><div class="ndr-logo" style="background:#63637215;color:#636e72">' + o.origCourier.substring(0, 3).toUpperCase() + '</div><div><div style="font-size:13px;font-weight:600">' + o.origCourier + '</div><div class="text-xs">Original courier</div></div></div>' +
+        '<div style="padding:12px 14px">' +
+        '<div class="ndr-score-big ndr-score-low">' + o.origScore + '<span style="font-size:15px;color:var(--bs-text-3)">%</span></div>' +
+        '<div class="text-sm" style="margin:4px 0">Predicted success rate</div>' +
+        '<div style="height:7px;background:var(--bs-border);border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="height:100%;background:linear-gradient(90deg,#F59E0B,#EF4444);border-radius:4px;width:' + o.origScore + '%;transition:width .8s ease"></div></div>' +
+        (o.delta > 0 ? '<span style="background:var(--bs-danger-bg);color:var(--bs-danger);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:600">↓ −' + o.delta + '% lower</span>' : '') +
+        '</div>' +
+        '</div>' +
+        /* VS */
+        '<div class="vs-pill">VS</div>' +
+        /* Card B */
+        '<div class="ndr-opt rec">' +
+        '<div class="ndr-opt-head" style="position:relative"><div class="ndr-rec-tag">✦ AI Pick</div><div class="ndr-logo" style="background:' + o.recColor + '15;color:' + o.recColor + ';border-color:' + o.recColor + '30">' + o.recAbbr + '</div><div><div style="font-size:13px;font-weight:600">' + o.recCourier + '</div><div class="text-xs">' + (noSwitch ? 'Keep same courier' : 'Switch to this courier') + '</div></div></div>' +
+        '<div style="padding:12px 14px">' +
+        '<div class="ndr-score-big ndr-score-high">' + (o.origScore + o.delta) + '<span style="font-size:15px;color:var(--bs-text-3)">%</span></div>' +
+        '<div class="text-sm" style="margin:4px 0">Predicted success rate</div>' +
+        '<div style="height:7px;background:var(--bs-border);border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="height:100%;background:linear-gradient(90deg,#007bff,#00B894);border-radius:4px;width:' + (o.origScore + o.delta) + '%;transition:width .8s ease"></div></div>' +
+        (o.delta > 0 ? '<span style="background:var(--bs-success-bg);color:var(--bs-success-text);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:600">↑ +' + o.delta + '% better</span>' : '') +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="c-provenance" style="margin-bottom:12px">Based on 847 reattempts on this pincode · last 90 days · Bigship AI</div>' +
+        (!o.feedbackDone ? '<div class="feedback-row" style="margin-bottom:12px"><span class="feedback-label">Was this analysis helpful?</span><span class="fb-btn" id="ndr-up-' + idx + '" onclick="ndrFeedback(' + idx + ',\'up\')">👍</span><span class="fb-btn" id="ndr-dn-' + idx + '" onclick="ndrFeedback(' + idx + ',\'down\')">👎</span></div>' : '') +
+        '<div style="display:flex;gap:10px">' +
+        '<button class="btn btn-green" onclick="ndrReattempt(' + idx + ',true)">Switch &amp; Reattempt with ' + o.recCourier + ' →</button>' +
+        '<button class="btn btn-outline" onclick="ndrReattempt(' + idx + ',false)">Keep ' + o.origCourier + ' &amp; Reattempt</button>' +
+        '</div>' +
+        '</div>';
+    }
+    var ndrOpen = null;
+    function ndrExpand(idx) {
+      if (ndrOpen !== null && ndrOpen !== idx) {
+        document.getElementById('ndrexp-' + ndrOpen).style.display = 'none';
+        document.getElementById('ndrow-' + ndrOpen).classList.remove('active');
+      }
+      var row = document.getElementById('ndrexp-' + idx);
+      var visible = row.style.display === 'table-row';
+      row.style.display = visible ? 'none' : 'table-row';
+      document.getElementById('ndrow-' + idx).classList.toggle('active', !visible);
+      ndrOpen = visible ? null : idx;
+    }
+    function ndrFeedback(idx, type) {
+      NDR_ORDERS[idx].feedbackDone = true;
+      if (type === 'up') showToast('Glad it helped! · Bigship AI learns from your feedback 🙏');
+      else showToast("Noted · We'll improve NDR recommendations 🔧");
+      var up = document.getElementById('ndr-up-' + idx), dn = document.getElementById('ndr-dn-' + idx);
+      if (type === 'up' && up) up.className = 'fb-btn up-active';
+      if (type === 'down' && dn) dn.className = 'fb-btn down-active';
+      if (up) up.disabled = true; if (dn) dn.disabled = true;
+    }
+    function ndrReattempt(idx, isSwitching) {
+      var o = NDR_ORDERS[idx];
+      var btn = event.target; btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+      setTimeout(function () {
+        btn.innerHTML = isSwitching ? 'Switch & Reattempt with ' + o.recCourier + ' →' : 'Keep ' + o.origCourier + ' & Reattempt';
+        btn.disabled = false;
+        var courier = isSwitching ? o.recCourier : o.origCourier;
+        showToast('✓ Reattempt scheduled with ' + courier + ' · Bigship AI predicted ' + (isSwitching ? (o.origScore + o.delta) : o.origScore) + '% success');
+        ndrExpand(idx); // close row
+      }, 1400);
+    }
+
+    /* ════════════════════════════════
+       TOAST (Mandate — top-right)
+    ════════════════════════════════ */
+    function showToast(msg) {
+      var container = document.getElementById('toast-container');
+      var t = document.createElement('div');
+      t.className = 'toast'; t.textContent = msg;
+      container.appendChild(t);
+      setTimeout(function () { t.classList.add('show'); }, 10);
+      setTimeout(function () { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 300); }, 3000);
+    }
+
+    /* ════════════════════════════════
+       COURIER PRIORITY INFO TOOLTIP
+    ════════════════════════════════ */
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.id === 'cp-info-btn') {
+        var tt = document.getElementById('cp-tooltip');
+        tt.style.display = tt.style.display === 'none' ? 'block' : 'none';
+      } else {
+        var tt = document.getElementById('cp-tooltip');
+        if (tt && !tt.contains(e.target)) tt.style.display = 'none';
+      }
+    });
+
+    /* ════════════════════════════════
+       INIT
+    ════════════════════════════════ */
+    initOrders();
+    initAddOrder();
+    initCPSettings();
+    initNDR();
+    // Auto-collapse callouts that were previously dismissed
+    ['orders', 'ao'].forEach(function (k) { initCallout(k); });
+  </script>
+</body>
+
+</html>
